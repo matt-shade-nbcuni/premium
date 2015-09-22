@@ -1,0 +1,474 @@
+<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+	<meta content="width=device-width" name="viewport"/>
+	<title>CNBC | Options Action </title>
+	<style>
+	table[class="wrapper"]{
+		width:600px;
+	}
+	@media only screen and (max-width: 599px) {
+		table[class="wrapper"]{
+			width:100%!important;
+		}
+	}
+	
+	@media only screen and (min-device-width : 414px) and (max-device-width : 736px) and (orientation : portrait) {
+	    td[class="drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+	    }
+		td[class="drop"] img {
+			width:100%!important;
+			display: block!important;
+			height:auto!important;
+		}
+		
+	    td[class="header-drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			text-align:center;			
+	    }
+		div[class="rundown"]{
+			text-align:center;
+		}
+		div[class="rundown-li"]{
+					margin-left:auto;margin-right:auto;width:80%;
+				}
+		td[class="header-drop"] img {			
+			text-align:center;			
+		}
+		td[class="twitter-drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+			
+		}
+		a[class="twitter"], div[class="twitter"] {
+			font-size:18px!important;
+		}
+		td[class="twitter"] img{width:80px!important;}
+		table[class="contents"]{padding-left:0px!important;}
+	}
+@media only screen and (max-width: 400px) {
+	    td[class="drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+	    }
+		td[class="drop"] img {
+			width:100%!important;
+			display: block!important;
+			height:auto!important;
+		}
+		
+	    td[class="header-drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			text-align:center;			
+	    }
+		div[class="rundown"]{
+			text-align:center;
+		}
+		div[class="rundown-li"]{
+					margin-left:auto;margin-right:auto;width:80%;
+				}
+		td[class="header-drop"] img {			
+			text-align:center;			
+		}
+		td[class="twitter-drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+			
+		}
+		a[class="twitter"], div[class="twitter"] {
+			font-size:18px!important;
+		}
+		td[class="twitter"] img{width:80px!important;}
+		table[class="contents"]{padding-left:0px!important;}
+		
+	}
+	
+	</style>
+</head>
+<body style="background:#efefef;">
+	<custom name="opencounter" type="tracking">
+		
+%%[Var @xml, @optionslistxml, @optionslistid, @optionslisturl, @optionslisturlprefix, @optionslisturlsuffix, @optionslistbody, @optionslistkeypoints
+
+Set @xml = httpget('http://www.cnbc.com/id/102932205/device/rss')
+Set @xml = REPLACE(@xml,"metadata:id","metadataid")
+
+Set @optionslistid = BuildRowsetFromXML(@xml,"//item/metadataid",1)
+Set @optionslistid = Field(Row(@optionslistid,1),"Value")
+
+Set @optionslisturlprefix = 'http://www.cnbc.com/id/'
+Set @optionslisturlsuffix = '/data.xml'
+
+
+Set @optionslisturl = Concat(@optionslisturlprefix,@optionslistid,@optionslisturlsuffix)
+
+Set @optionslistxml = httpget(@optionslisturl)
+
+Set @optionslistbody = BuildRowsetFromXML(@optionslistxml,"//content/html_body",1)
+
+Set @optionslistbody = Field(Row(@optionslistbody,1),"Value")
+
+
+Set @optionslistkeypoints = BuildRowsetFromXML(@optionslistxml,"//content/html_keypoints",1)
+Set @optionslistkeypoints = Field(Row(@optionslistkeypoints,1),"Value")
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"{","")
+
+Set @optionslistbody = REPLACE(@optionslistbody,"<a","<a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;font-weight:bold;'")
+Set @optionslistbody = REPLACE(@optionslistbody,'href="/','href=http://www.cnbc.com/')
+Set @optionslistbody = REPLACE(@optionslistbody,'href="/','href=http://www.cnbc.com/')
+Set @optionslistbody = REPLACE(@optionslistbody,"<p","<div style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;padding-left:20px;padding-right:10px;padding-top:5px;padding-bottom:5px;margin-bottom:10px;'")
+Set @optionslistbody = REPLACE(@optionslistbody,"</p>","</div>")
+Set @optionslistbody = REPLACE(@optionslistbody,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='100%' align='center'><tr><td style='background:#163a4d;font-family:Helvetica, Arial, sans-serif;color:#efefef;text-transform:uppercase; font-size:16px;border-radius:3px;'")
+Set @optionslistbody = REPLACE(@optionslistbody,"</h4>","</td></tr></table><br>")
+
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"<a","<a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;font-weight:bold;'")
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,'href="/','href=http://www.cnbc.com/')
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,'href="/','href=http://www.cnbc.com/')
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"<p","<div style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;padding-right:10px;padding-top:5px;margin-bottom:10px;'")
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"</p>","</div>")
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='100%' align='center'><tr><td style='background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase;font-size:16px;border-radius:3px;'")
+Set @optionslistkeypoints = REPLACE(@optionslistkeypoints,"</h4>","</td></tr></table><br>")
+
+
+ 
+]%%		
+		
+<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#909dab;margin-bottom:10px;text-align:center;">To view this email as a web page, click <a style="color:#3da5ed;text-decoration:none;" href="%%view_email_url%%">here.</a></div>		
+		
+<!--MAIN WRAPPER -->
+	<table class="wrapper" width="600" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;border-top-right-radius:3px;border-top-left-radius:3px;" align="center">
+		<tr>
+			<td>
+<!--END MAIN WRAPPER -->
+	
+	
+	<!--MAIN HEADER -->
+	
+	
+	
+	<table  width="100%" cellspacing="0" cellpadding="10" border="0" align="center" style="background:#163a4d;border-top-right-radius:3px;border-top-left-radius:3px;">
+		<tr>
+			<td class="header-drop" style="border-top-right-radius:3px;border-top-left-radius:3px;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
+				
+	<a href="http://optionsaction.cnbc.com"><img style="color:#ffffff;" width="190" alt="CNBC | Options Action"  id="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/options-action-horizontal.png" border="0"/></a>
+	<div class="rundown" style="font-family:Helvetica, Arial, sans-serif;font-size:16px;color:#3da5ed;text-transform:uppercase;margin-top:5px;">Live at 5:30PM ET</div>
+			</td>
+			<td class="header-drop" align="right">
+				<a href="http://www.thinkorswim.com"><img style="color:#ffffff;" width="100" alt="CNBC | Options Action"  id="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/think-or-swim.png" border="0"/></a>
+			</td>
+		</tr>
+	</table>
+	
+	<table cellspacing="0" cellpadding="10" border="0" align="center" width="95%" style="background:#fff;">
+		<tr>
+			<td class="header-drop" valign="middle" > 				
+				<a href="http://optionsaction.cnbc.com">
+					<img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/options-action-traders.jpg" width="250"  border="0"/>					
+				</a>
+			</td>
+			<td class="header-drop" valign="middle" >
+				
+				
+				
+				<div class="rundown" style="font-family:Helvetica, Arial, sans-serif;font-size:18px;margin-bottom:10px;color:#333;text-transform:uppercase;font-weight:bold;">Tonight's Trades:</div>
+				
+				%%=v(@optionslistkeypoints)=%%
+				
+</td>
+		</tr>
+	</table>
+
+	<table cellspacing="5" cellpadding="10" border="0"  width="95%" align="center">
+		<tr>
+			<td  style="background:#163a4d;font-family:Helvetica, Arial, sans-serif;color:#efefef;text-transform:uppercase; font-size:16px;border-radius:3px;" >
+				THIS WEEK'S TOP STORIES
+			</td>
+		</tr>
+	</table>
+	<br>
+
+
+
+
+
+%%[Var @firstoptionsxml, @firstoptionstitles, @firstoptionstitle, @firstoptionstitleid, @firstoptionsurlprefix, @firstoptionsurlsuffix, @firstoptionsurl, @firstoptionsurlxml, @firstoptionspromoheadline, @firstoptionspromoheadlinetitle, @firstoptionsdescs, @firstoptionsdesc, @firstoptionslinks, @firstoptionslink, @firstoptionsthumbs, @firstoptionsthumb, @firstoptionsthumbslink, @firstoptionscnt, @firstoptionsrows, @firstoptionsbyline, @firstoptionsbylinelink
+
+set @firstoptionsxml = httpget('http://www.cnbc.com/id/102932205/data.xml')
+
+Set @firstoptionstitles = BuildRowsetFromXML(@firstoptionsxml,"//Relations/related/asset",1)
+
+
+SET @firstoptionsrows = RowCount(@firstoptionstitles)
+
+IF @firstoptionsrows >= @firstoptionsrows THEN
+for @firstoptionscnt = 1 to 1 do
+Set @firstoptionstitleid = Field(Row(@firstoptionstitles,@firstoptionscnt),"id_att")
+
+Set @firstoptionsurlprefix = 'http://www.cnbc.com/id/'
+Set @firstoptionsurlsuffix = '/data.xml'
+
+
+Set @firstoptionsurl = Concat(@firstoptionsurlprefix,@firstoptionstitleid,@firstoptionsurlsuffix)
+Set @firstoptionslink = Concat(@firstoptionsurlprefix,@firstoptionstitleid)
+Set @firstoptionsurlxml = httpget(@firstoptionsurl)
+set @firstoptionspromoheadline = BuildRowsetFromXML(@firstoptionsurlxml,"//promotional_view/headline/shortest_headline",1)
+set @firstoptionspromoheadlinetitle =  Field(Row(@firstoptionspromoheadline,1),"Value")
+Set @firstoptionstitle = Field(Row(@firstoptionstitles,@firstoptionscnt),"id_att")
+Set @firstoptionsdesc = BuildRowsetFromXML(@firstoptionsurlxml,"//promotional_view/description/seo_description",1)
+Set @firstoptionsdesc = Field(Row(@firstoptionsdesc,1),"Value")
+Set @firstoptionsbyline = BuildRowsetFromXML(@firstoptionsurlxml,"//attribution/author/asset/name",1)
+Set @firstoptionsbyline = Field(Row(@firstoptionsbyline,1),"Value")
+
+Set @firstoptionsbylinelink = BuildRowsetFromXML(@firstoptionsurlxml,"//attribution/author/asset",1)
+Set @firstoptionsbylinelink = Field(Row(@firstoptionsbylinelink,1),"id_att")
+Set @firstoptionsbylinelink = Concat(@firstoptionsurlprefix,@firstoptionsbylinelink)
+
+Set @firstoptionsthumb = BuildRowsetFromXML(@firstoptionsurlxml,"//promotional_view/image/asset/filepath",1)
+Set @firstoptionsthumb = Field(Row(@firstoptionsthumb,1),"Value")
+
+]%%
+
+<table class="contents" cellspacing="0" cellpadding="10" border="0" style="margin-bottom:20px;" width="95%" align="center">
+	<tr>
+	<td class="drop" width="140" valign="middle">
+	<a href="%%=RedirectTo(@firstoptionslink)=%%" title="%%%=v(@firstoptionspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;"><img width="140" src="%%=v(@firstoptionsthumb)=%%" border="0"/></a>
+	</td>		
+		<td class="drop" valign="middle">
+				<div style="margin-bottom:5px;"><a href="%%=RedirectTo(@firstoptionslink)=%%" title="%%%=v(@firstoptionspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Helvetica, Arial, sans-serif;font-size:20px;">%%=v(@firstoptionspromoheadlinetitle)=%%</a>
+				</div>
+				
+				<div style="color:#424858;font-weight:normal;font-family:Helvetica, Arial, sans-serif;font-size:12px; margin-bottom:5px;">by <a style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Helvetica, Arial, sans-serif;font-size:12px;" href="%%=RedirectTo(@firstoptionsbylinelink)=%%">%%=v(@firstoptionsbyline)=%%</a></div>
+				
+				<div style="font-size:14px; line-height:18px; font-family:Helvetica, Arial, sans-serif; color: #424858;">%%=v(@firstoptionsdesc)=%%</div>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @firstoptionscnt 
+ENDIF
+]%%
+
+
+
+
+
+
+
+%%[Var @optionsxml, @optionstitles, @optionstitle, @optionstitleid, @optionsurlprefix, @optionsurlsuffix, @optionsurl, @optionsurlxml, @optionspromoheadline, @optionspromoheadlinetitle, @optionsdescs, @optionsdesc, @optionslinks, @optionslink, @optionsthumbs, @optionsthumb, @optionsthumbslink, @optionscnt, @optionsrows
+
+set @optionsxml = httpget('http://www.cnbc.com/id/102932205/data.xml')
+
+Set @optionstitles = BuildRowsetFromXML(@optionsxml,"//Relations/related/asset",1)
+
+
+SET @optionsrows = RowCount(@optionstitles)
+
+IF @optionsrows >= @optionsrows THEN
+for @optionscnt = 2 to @optionsrows do
+Set @optionstitleid = Field(Row(@optionstitles,@optionscnt),"id_att")
+
+Set @optionsurlprefix = 'http://www.cnbc.com/id/'
+Set @optionsurlsuffix = '/data.xml'
+
+
+Set @optionsurl = Concat(@optionsurlprefix,@optionstitleid,@optionsurlsuffix)
+Set @optionslink = Concat(@optionsurlprefix,@optionstitleid)
+Set @optionsurlxml = httpget(@optionsurl)
+set @optionspromoheadline = BuildRowsetFromXML(@optionsurlxml,"//promotional_view/headline/link_headline",1)
+set @optionspromoheadlinetitle =  Field(Row(@optionspromoheadline,1),"Value")
+Set @optionstitle = Field(Row(@optionstitles,@optionscnt),"id_att")
+
+
+]%%
+
+	
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@optionslink)=%%" title="%%%=v(@optionspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@optionspromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @optionscnt 
+ENDIF
+]%%
+
+	<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#ffffff;padding-bottom:25px;" width="100%"><tbody><tr><td align="center"><img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/></td></tr><tr><td align="center"><a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/optnsctn;site=cnbc;sect=optnsctn;!c=optnsctn;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank"><img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/optnsctn;site=cnbc;sect=optnsctn;!c=optnsctn;pos=1;tile=1;sz=300x250;ord=123456a" border="0"></a><br></td></tr></tbody></table>
+	
+	<table cellspacing="0" cellpadding="10" border="0"  width="95%" align="center">
+		<tr>
+			<td  style="background:#163a4d;font-family:Helvetica, Arial, sans-serif;color:#efefef;text-transform:uppercase; font-size:16px;border-radius:3px;" >
+				<img width="24" style="margin-right:5px; vertical-align:middle;" border="0" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/oa-twitter-icon.png"><span>TWEET THE TRADERS</span>
+			</td>
+		</tr>
+	</table>
+	<br>
+	
+	<table cellspacing="0" cellpadding="10" border="0"  width="95%" align="center">
+		<tr>
+			<td class="twitter-drop" style="" >
+				
+				<table cellspacing="0" cellpadding="2" border="0"  width="100%">
+					<tr>
+						<td class="twitter" valign="top" width="50"> 
+							<a href="https://twitter.com/michael_khouw"><img width="50" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/michael-khouw.png" border="0"/></a>
+						</td>
+						<td  valign="middle">
+				<div class="twitter" style="font-family: Helvetica, Arial, sans-serif; font-size:14px;font-weight:bold;margin-bottom:5px;">Michael Khouw</div>				
+					<a class="twitter" style="text-decoration: none; color:#2d648a;font-family: Helvetica, Arial, sans-serif; font-size:14px;" href="https://twitter.com/michael_khouw">@Michael_Khouw</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+					<td  class="twitter-drop" style="" >
+						<table cellspacing="0" cellpadding="2" border="0"  width="100%">
+							<tr>
+								<td class="twitter" valign="top" width="50">
+									<a href="https://twitter.com/optionsaction"><img width="50" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/options-action-twitter.png" border="0"/></a>
+								</td>
+								<td valign="middle">
+						<div class="twitter" style="font-family: Helvetica, Arial, sans-serif; font-size:14px;font-weight:bold;margin-bottom:5px;">Options Action</div>						
+							<a class="twitter" style="text-decoration: none; color:#2d648a;font-family: Helvetica, Arial, sans-serif; font-size:14px;" href="https://twitter.com/optionsaction">@optionsaction</a>
+									</td>
+								</tr>
+							</table>
+					</td>
+			
+					<td  class="twitter-drop" style="" >
+						<table cellspacing="0" cellpadding="2" border="0"  width="100%">
+							<tr>
+								<td class="twitter" valign="top" width="50">
+									<a href="https://twitter.com/riskreversal"><img width="50" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/dan-nathan.png" border="0"/></a>
+								</td>
+								<td  valign="middle">
+						<div class="twitter" style="font-family: Helvetica, Arial, sans-serif; font-size:14px;font-weight:bold;margin-bottom:5px;">Dan Nathan</div>						
+						<a class="twitter" style="text-decoration: none; color:#2d648a;font-family: Helvetica, Arial, sans-serif; font-size:14px;" href="https://twitter.com/riskreversal">@RiskReversal</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+		</tr>
+	</table>
+	<br>
+	
+	
+<table class="contents" cellspacing="0" cellpadding="10" border="0"  width="100%" align="center">
+	<tr>
+		<td class="drop">
+				%%=v(@optionslistbody)=%%
+		</td>
+	</tr>
+</table>
+<br>
+
+<!--FOOTER -->
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;"><tr><td style="background:#ffffff;"><table cellpadding="20" cellspacing="0" border="0" align="center" width="100%" style="border-radius:3px; border-collapse:collapse;background:#efefef; width:80%; margin-bottom:30px;"><tr><td valign="top" style="font-family:Helvetica, Arial, sans-serif; color:#666666; text-transform:uppercase;">Feedback <p style="font-size: 14px;line-height:20px; text-transform:none;"> We value your input&mdash;use <a href="http://cnbcllca.custhelp.com/app/ask?hq_e=el&hq_m=18311&hq_l=35&hq_v=c867b09142" style="color:#2077b6;text-decoration:none;"> our simple form</a> to let us know what you think. Click <a href="http://www.cnbc.com" style="color:#2077b6;text-decoration:none;">here</a> for Real-Time data and top stories on your desktop or mobile device.</p></td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style=" border-collapse:collapse;padding-top:20px;"><tr></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;">
+	<tr>
+	
+	<td class="drop" valign="top" align="center">
+	
+	<table border="0" cellspacing="0" cellpadding="0"><tr><td><a class="send-to-friend" href="%%ftaf_url%%"><img border="0" src="http://image.s7.exacttarget.com/lib/fe9813727567067574/m/1/envelope-sm.png"></a></td><td><a class="send-to-friend" href="%%ftaf_url%%" style="color:#8c8c8c; vertical-align:middle;text-decoration:none;font-size:11px;display:block;padding-left:5px; font-family:Arial; font-weight:bold;">Send this email to a friend</a></td>
+		
+	</tr></table>	</td>
+
+		<td class="drop" align="center">
+			
+			<table cellpadding="0" cellspacing="0" border="0" >
+				<tr>
+					<td valign="top" style="background:#ffffff; padding-right:8px;">
+						<a href="http://www.linkedin.com/company/cnbc" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-linkedin-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="padding-right:8px;background:#ffffff;">
+						<a href="https://plus.google.com/+CNBC/posts" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-google-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="padding-right:8px;background:#ffffff;">
+						<a href="http://www.twitter.com/cnbc" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-twitter-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="background:#ffffff;">
+						<a href="http://www.facebook.com/CNBC" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-facebook-24px.png" border="0"/>
+						</a>
+					</td>
+				</tr>
+			</table>
+			
+			
+		</td>
+</tr></table>
+<br>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top" style="background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="padding-top:10px;margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a id="unsubscribe" href="%%microsite_base_url[default]48[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a href="%%microsite_base_url[default]476[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;">More Newsletters</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+
+
+
+
+
+
+<!--END FOOTER -->
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0"  width="100%" align="center" style="background:#efefef;">
+	<tr>
+		<td class="drop">
+			<div style="background:#efefef;color:#424858;font-size:14px;font-family:Helvetica, Arial, sans-serif; text-align:center;padding-top:20px;padding-bottom:20px;">To ensure delivery to your inbox,<br> please add <a style="color:#3da5ed;text-decoration:none;" href="mailto:optionsaction@response.cnbc.com">optionsaction@response.cnbc.com</a><br> to your address book.</div>
+			<br>
+				<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#424858;margin-bottom:10px;">All opinions expressed by the Program Participants are solely their current opinions and do not reflect the opinions of CNBC, NBC UNIVERSAL, their respective parent companies or affiliates or the companies with which the Program Participants are affiliated and may have been previously disseminated by them. The Program Participants' opinions are based upon information they consider reliable, but neither CNBC,  nor its respective affiliates and/or subsidiaries, nor the companies with which such participants are affiliated, warrant its completeness or accuracy, and it should not be relied upon as such.</div>  
+ 
+				<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#424858;margin-bottom:10px;">The Program Participants are professional traders who may be actively involved in securities discussed on the Program, on behalf of themselves, their companies and their clients.  Also, the Program Participants and/or their companies may engage in options trading and may hold both long and short options positions in the same security, as well as the underlying stock.  The opinions expressed by the Program Participants may be short-term in nature and are subject to change. No part of the Program Participants' compensation from CNBC is related to the specific opinions they express.</div>
+ 
+				<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#424858;margin-bottom:10px;">Past performance is not indicative of future results.  Neither the Program Participants, nor CNBC, guarantee any specific outcome or profit.  You should be aware of the real risk of loss in following any strategy or investment discussed on the program.  In particular, options are complex securities that can be extremely risky and carry substantial risk of loss.   Strategies or investments discussed may fluctuate in price or value.</div>  
+ 
+				<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#424858;margin-bottom:10px;">Investments or strategies mentioned in herein may not be suitable for you and you should make your own independent decision regarding them.  This material does not take into account your particular investment objectives, financial situation or needs and is not intended as recommendations appropriate for you.  You should strongly consider seeking advice from your own investment adviser.</div>
+		</td>
+	</tr>
+</table>
+
+	
+	</td></tr></table>
+	
+	
+	<!--MAIN WRAPPER -->	
+			</td>
+		</tr>
+	</table>
+<!--END MAIN WRAPPER -->
+</body>
+</html>

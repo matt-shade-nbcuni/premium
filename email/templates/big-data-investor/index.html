@@ -1,0 +1,280 @@
+<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+	<meta content="width=device-width" name="viewport"/> 
+	<title>CNBC | Big Data Investor</title>
+	<style>
+	table[class="wrapper"]{
+		width:600px;
+	}
+	td[class="drop"] img {
+				width:100%!important;
+				display: block!important;
+			
+			} 
+	
+	@media only screen and (max-width: 599px) {
+		table[class="wrapper"]{
+			width:100%!important;
+		}
+	    td[class="drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+	    }
+		td[class="drop"] img {
+			width:100%!important;
+			display: block!important;
+			
+		} 
+	}
+	
+@media only screen and (max-width: 400px) {
+	table[class="wrapper"]{
+		width:100%!important;
+	}
+	    td[class="drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+	    }
+		td[class="drop"] img {
+			width:100%!important;
+			display: block!important;
+			
+		} 
+		div[class="header"]{
+			font-size:33px!important;
+			padding-top:10px!important;
+		}
+			
+	}
+	
+	</style>
+
+<body style="background:#efefef;">
+	<custom name="opencounter" type="tracking">
+		<div style="font-size:12px;font-family:Helvetica, Arial, sans-serif; color:#909dab;margin-bottom:10px;text-align:center;">To view this email as a web page, click <a style="color:#3da5ed;text-decoration:none;" href="%%view_email_url%%">here.</a></div>
+<!--MAIN WRAPPER -->
+	<table class="wrapper" width="600"  cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;border-top-right-radius:3px;border-top-left-radius:3px;" align="center">
+		<tr>
+			<td>
+<!--END MAIN WRAPPER -->
+
+%%[Var @xml, @bigdataxml, @bigdataid, @bigdataurl, @bigdataurlprefix, @bigdataurlsuffix, @bigdatabody, @bigdatakeypoints, @bigdatacreator, @bigdatacreatorxml, @bigdatacreatorimage, @bigdatacreatorname, @bigdatacreatordesc, @creatorimgprefix, @creatorimgsuffix, @creatorurlprefix, @creatorurlsuffix, @bigdatakenshoxml, @bigdatakensho
+
+Set @bigdataxml = httpget('http://www.cnbc.com/id/102945686/data.xml')
+Set @bigdatabody = BuildRowsetFromXML(@bigdataxml,"//content/html_body",1)
+Set @bigdatabody = Field(Row(@bigdatabody,1),"Value")
+
+Set @bigdatakenshoxml = httpget('http://www.cnbc.com/id/102949597/data.xml')
+Set @bigdatakensho = BuildRowsetFromXML(@bigdatakenshoxml,"//content/html_body",1)
+Set @bigdatakensho = Field(Row(@bigdatakensho,1),"Value")
+
+
+Set @bigdataurlprefix = 'http://www.cnbc.com/id/'
+Set @bigdataurlsuffix = '/device/rss'
+
+
+Set @bigdatacreator = BuildRowsetFromXML(@bigdataxml,"//attribution/author/asset",1)
+
+
+
+if ROWCOUNT(@bigdatacreator) == 1 then
+Set @bigdatacreator = Field(Row(@bigdatacreator,1),"id_att") 
+Set @bigdatacreatorxml = Concat(@bigdataurlprefix,@bigdatacreator,@bigdataurlsuffix)
+Set @bigdatacreatorxml = httpget(@bigdatacreatorxml)
+Set @bigdatacreatorname = BuildRowsetFromXML(@bigdatacreatorxml,"//image/title",1)
+Set @bigdatacreatorname = Field(Row(@bigdatacreatorname,1),"Value")
+Set @bigdatacreatordesc = BuildRowsetFromXML(@bigdatacreatorxml,"//image/description",1)
+Set @bigdatacreatordesc = Field(Row(@bigdatacreatordesc,1),"Value") 
+Set @bigdatacreatorimage = BuildRowsetFromXML(@bigdatacreatorxml,"//image/url",1) 
+Set @bigdatacreatorimage = Field(Row(@bigdatacreatorimage,1),"Value")
+Set @creatorimgprefix ='<img src="'
+Set @creatorimgsuffix ='" width="60">'
+Set @bigdatacreatorimage = Concat(@creatorimgprefix,@bigdatacreatorimage,@creatorimgsuffix)
+Set @creatorurl =Concat(@bigdataurlprefix, @bigdatacreator)
+
+endif
+
+
+Set @bigdatakeypoints = BuildRowsetFromXML(@bigdataxml,"//content/html_keypoints",1)
+Set @bigdatakeypoints = Field(Row(@bigdatakeypoints,1),"Value")
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"{","")
+
+
+<!--KEY POINTS CONTENT -->
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"<a","<a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;font-weight:bold;'")
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,'href="/','href=http://www.cnbc.com/')
+
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"<p","<table class='contents' cellspacing='0' cellpadding='10' border='0' align='center' width='95%' ><tr><td class='drop' valign='top'><div style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;'")
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"</p>","</div></td></tr></table>")
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='95%' align='center'><tr><td style='background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase;font-size:16px;border-radius:3px;'")
+Set @bigdatakeypoints = REPLACE(@bigdatakeypoints,"</h4>","</td></tr></table>")
+
+
+<!--BODY CONTENT -->
+Set @bigdatabody = REPLACE(@bigdatabody,"<a","<a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;font-weight:bold;'")
+Set @bigdatabody = REPLACE(@bigdatabody,'href="/','href="http://www.cnbc.com/')
+Set @bigdatabody = REPLACE(@bigdatabody,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='95%' align='center'><tr><td style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:24px;'")
+Set @bigdatabody = REPLACE(@bigdatabody,"</h4>","</td></tr></table>")	
+Set @bigdatabody = REPLACE(@bigdatabody,"<p","<table class='contents' cellspacing='0' cellpadding='10' border='0' align='center' width='95%' ><tr><td class='drop' valign='top'><span style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;margin-bottom:10px;'")	
+Set @bigdatabody = REPLACE(@bigdatabody,"</p>","</span></td></tr></table><hr style='color:lightgrey;color: #efefef;background-color: #efefef;height: 1px; border:0; margin-top:10px;margin-bottom:40px;width:95%;'>")
+Set @bigdatabody = REPLACE(@bigdatabody,'<span','<div')
+Set @bigdatabody = REPLACE(@bigdatabody,'</span','</div')
+Set @bigdatabody = REPLACE(@bigdatabody,'<div class="group-container ">','')
+Set @bigdatabody = REPLACE(@bigdatabody,'<div class="group">','')	
+Set @bigdatabody = REPLACE(@bigdatabody,"<img","<table  cellspacing='0' cellpadding='10' border='0' width='95%' align='center'><tr><td class='drop'><img width='600'")
+Set @bigdatabody = REPLACE(@bigdatabody,'&nbsp;','</td></tr></table>')
+
+<!--ASK KENSHO CONTENT -->
+Set @bigdatakensho = REPLACE(@bigdatakensho,"<a","<a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;font-weight:bold;'")
+Set @bigdatakensho = REPLACE(@bigdatakensho,'href="/','href="http://www.cnbc.com/')
+Set @bigdatakensho = REPLACE(@bigdatakensho,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='95%' align='center'><tr><td style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:24px;'")
+Set @bigdatakensho = REPLACE(@bigdatakensho,"</h4>","</td></tr></table>")	
+Set @bigdatakensho = REPLACE(@bigdatakensho,"<p","<table class='contents' cellspacing='0' cellpadding='10' border='0' align='center' width='95%' ><tr><td class='drop' valign='top'><span style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;margin-bottom:10px;'")	
+Set @bigdatakensho = REPLACE(@bigdatakensho,"</p>","</span></td></tr></table><hr style='color:lightgrey;color: #efefef;background-color: #efefef;height: 1px; border:0; margin-top:10px;margin-bottom:40px;width:95%;'>")
+Set @bigdatakensho = REPLACE(@bigdatakensho,'<span','<div')
+Set @bigdatakensho = REPLACE(@bigdatakensho,'</span','</div')
+Set @bigdatakensho = REPLACE(@bigdatakensho,'<div class="group-container ">','')
+Set @bigdatakensho = REPLACE(@bigdatakensho,'<div class="group">','')	
+Set @bigdatakensho = REPLACE(@bigdatakensho,"<img","<table  cellspacing='0' cellpadding='10' border='0' width='95%' align='center'><tr><td class='drop'><img width='600'")
+Set @bigdatakensho = REPLACE(@bigdatakensho,'&nbsp;','</td></tr></table>')
+ 
+]%%	
+<table  cellspacing='0' cellpadding='20' border='0' width='95%' align='center' style='background:#146195;'>
+	<tr>
+		<td><div>
+			<a href=http://www.cnbc.com/kensho/><img src='http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-bdi-logo.png' border='0' width='250' /></a></div>
+			<a style='text-decoration:none;' href=http://www.cnbc.com/kensho/><div class='header' style='font-family:Helvetica, Arial, sans-serif;color:#ffffff;font-size:52px;'>Big Data Investor</div></a>
+		</td>
+	</tr>
+</table>
+%%=v(@bigdatakeypoints)=%%
+
+<table  cellspacing='0' cellpadding='20' border='0' width='95%' align='center'><tr><td>
+<!-- <div>%%=v(@creatorurl)=%%</div> -->
+
+<div><a href=%%=RedirectTo(@creatorurl)=%%>%%=v(@bigdatacreatorimage)=%%</a></div>
+<div><a style='font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:16px;text-decoration:none;' href=%%=RedirectTo(@creatorurl)=%%>%%=v(@bigdatacreatorname)=%%</a></div>
+<div style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:14px;'>%%=v(@bigdatacreatordesc)=%%</div>
+</td></tr></table>
+
+
+
+	
+
+
+<hr style='color:lightgrey;color: #efefef;background-color: #efefef;height: 1px; border:0; margin-top:10px;margin-bottom:40px;width:95%;'>
+
+
+%%=v(@bigdatabody)=%%
+
+<!--PRO -->
+%%[Var @proHeaderxml, @proHeadertitles, @proHeadercnt, @proHeaderrows, @proHeadercnt
+set @proHeaderxml = httpget('http://www.cnbc.com/id/102900050/data.xml')
+Set @proHeadertitles = BuildRowsetFromXML(@proHeaderxml,"//Relations/primary/asset",1)
+SET @proHeaderrows = RowCount(@proHeadertitles)
+IF @proHeaderrows >= 1 THEN
+for @proHeadercnt = 1 to 1 do
+]%%
+
+<table cellspacing="10" cellpadding="10" border="0"  width="100%">
+	<tr>
+		<td style="background:#146195;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase;vertical-align:middle;border-radius:3px;" ><img style="vertical-align:middle;width:148px;margin-left:3px;" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/PRO/EMAIL/img/pro-head-badge.png" alt="CNBC Pro" width="148"></td>
+	</tr>
+</table>
+<br>
+%%[ 
+NEXT @proHeadercnt 
+ENDIF
+]%%
+
+
+%%[Var @proxml, @protitles, @protitle, @protitleid, @prourlprefix, @prourlsuffix, @prourl, @prourlxml, @propromoheadline, @propromoheadlinetitle, @prodescs, @prodesc, @prolinks, @prolink, @prothumbs, @prothumb, @prothumbslink, @procnt, @prorows
+
+set @proxml = httpget('http://www.cnbc.com/id/102949675/data.xml')
+
+Set @protitles = BuildRowsetFromXML(@proxml,"//Relations/primary/asset",1)
+
+
+SET @prorows = RowCount(@protitles)
+
+IF @prorows >= @prorows THEN
+for @procnt = 1 to @prorows do
+Set @protitleid = Field(Row(@protitles,@procnt),"id_att")
+
+Set @prourlprefix = 'http://www.cnbc.com/id/'
+Set @prourlsuffix = '/data.xml'
+
+
+Set @prourl = Concat(@prourlprefix,@protitleid,@prourlsuffix)
+Set @prolink = Concat(@prourlprefix,@protitleid)
+Set @prourlxml = httpget(@prourl)
+set @propromoheadline = BuildRowsetFromXML(@prourlxml,"//promotional_view/headline/link_headline",1)
+set @propromoheadlinetitle =  Field(Row(@propromoheadline,1),"Value")
+Set @protitle = Field(Row(@protitles,@procnt),"id_att")
+
+
+]%%
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@prolink)=%%" title="%%%=v(@propromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@propromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @procnt 
+ENDIF
+]%%
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#ffffff;padding-bottom:25px;" width="100%"><tbody><tr><td align="center"><img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/></td></tr><tr><td align="center"><a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/optnsctn;site=cnbc;sect=optnsctn;!c=optnsctn;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank"><img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/optnsctn;site=cnbc;sect=optnsctn;!c=optnsctn;pos=1;tile=1;sz=300x250;ord=123456a" border="0"></a><br></td></tr></tbody></table>
+
+%%=v(@bigdatakensho)=%%
+<br>
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td width="28" valign="middle">
+			<a href="%%ftaf_url%%"><img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/mail-icon.png" width="22" border="0"></a>
+		</td>
+		<td valign="middle">
+			<a style="font-family:Helvetica, Arial, sans-serif;color:#2077b6;font-size:14px;text-decoration:none;" href="%%ftaf_url%%">Send this email to a friend</a>
+		</td>
+	</tr>
+</table>
+
+
+
+
+
+<br>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top" style="background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="padding-top:10px;margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a id="unsubscribe" href="%%microsite_base_url[default]48[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a href="%%microsite_base_url[default]476[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;">More Newsletters</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0"  width="100%" align="center" style="background:#efefef;">
+	<tr>
+		<td class="drop">
+			<div style="background:#efefef;color:#424858;font-size:14px;font-family:Helvetica, Arial, sans-serif; text-align:center;padding-top:20px;padding-bottom:20px;">To ensure delivery to your inbox,<br> please add <a style="color:#3da5ed;text-decoration:none;" href="mailto:bigdatainvestor@response.cnbc.com">bigdatainvestor@response.cnbc.com</a><br> to your address book.</div>
+			</td>
+			</tr>
+</table>
+	<!--MAIN WRAPPER -->	
+			</td>
+		</tr>
+	</table>
+<!--END MAIN WRAPPER -->
+</body>
+</html>
+	
+	
