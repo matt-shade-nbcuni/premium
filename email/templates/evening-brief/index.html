@@ -1,9 +1,11 @@
 <!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<head>	 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta content="width=device-width" name="viewport"/>
-	<title>CNBC | Evening Brief</title>
+	<title>CNBC | Evening Brief </title>
 	<style>
+	
 	table[class="wrapper"]{
 		width:600px;
 	}
@@ -26,13 +28,27 @@
 			display: block!important;
 			height:auto!important;
 		}
-		/*img[id="header-logo"]{width:100%;}*/
 		
 		table[class="contents"]{padding-left:0px!important;}
+		
+		a[class="footer-link"]{width:100%!important;
+			display: block!important;
+			margin-bottom:4px;
+			margin-top:4px;
+		}
+			img[class="header-logo"]{
+				width:250px!important;;
+			}
+			
+			table { 
+			    border-spacing: 0;
+			    border-collapse: collapse;
+			}
 		
 	}
 	
 	</style>
+	
 </head>
 <body style="background:#efefef;">
 	<custom name="opencounter" type="tracking">
@@ -48,7 +64,7 @@
 			<table width="100%"  cellspacing="0" cellpadding="10" border="0" align="center">
 				<tr>
 					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#0d3d61;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
-			<img style="color:#ffffff;width:240px;" alt="CNBC | Evening Brief"  id="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/evening-brief.png" border="0"/>
+			<img style="color:#ffffff;width:320px;" alt="CNBC | Evening Brief"  class="header-logo" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2014/EMAIL/EVENING-BRIEF/REDESIGN/evening-brief-logo.png" border="0"/>
 					</td>
 				</tr>
 			</table>
@@ -69,7 +85,7 @@
 	</table>
 	<br>	
 <!--END MARKETS IMAGE -->
-	
+
 <!--NEWS -->
 	
 %%[Var @newsHeaderxml, @newsHeadertitles, @newsHeadercnt, @newsHeaderrows, @newsHeadercnt
@@ -104,7 +120,7 @@ Set @newstitles = BuildRowsetFromXML(@newsxml,"//Relations/primary/asset",1)
 SET @newsrows = RowCount(@newstitles)
 
 IF @newsrows >= @newsrows THEN
-for @newscnt = 1 to @newsrows do
+for @newscnt = 1 to 3 do
 Set @newstitleid = Field(Row(@newstitles,@newscnt),"id_att")
 
 Set @newsurlprefix = 'http://www.cnbc.com/id/'
@@ -116,8 +132,74 @@ Set @newslink = Concat(@newsurlprefix,@newstitleid)
 Set @newsurlxml = httpget(@newsurl)
 set @newspromoheadline = BuildRowsetFromXML(@newsurlxml,"//promotional_view/headline/link_headline",1)
 set @newspromoheadlinetitle =  Field(Row(@newspromoheadline,1),"Value")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€"','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€œ','"')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€™","'")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€¦","...")
 Set @newstitle = Field(Row(@newstitles,@newscnt),"id_att")
-SET @newstitle = REPLACE(@newstitle,'â€”','&mdash;')
+
+
+]%%
+
+
+
+
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@newslink)=%%" title="%%%=v(@newspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@newspromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @newscnt 
+ENDIF
+]%%
+
+<!--ADVERT -->
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#efefef;margin-bottom:40px;" width="95%">
+	<tr>
+		<td align="center">
+			<img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank">
+				<img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<br>
+<!--END ADVERT -->
+
+%%[
+
+IF @newsrows >= @newsrows THEN
+for @newscnt = 4 to @newsrows do
+Set @newstitleid = Field(Row(@newstitles,@newscnt),"id_att")
+
+Set @newsurlprefix = 'http://www.cnbc.com/id/'
+Set @newsurlsuffix = '/data.xml'
+
+
+Set @newsurl = Concat(@newsurlprefix,@newstitleid,@newsurlsuffix)
+Set @newslink = Concat(@newsurlprefix,@newstitleid)
+Set @newsurlxml = httpget(@newsurl)
+set @newspromoheadline = BuildRowsetFromXML(@newsurlxml,"//promotional_view/headline/link_headline",1)
+set @newspromoheadlinetitle =  Field(Row(@newspromoheadline,1),"Value")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€"','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€œ','"')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€™","'")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€¦","...")
+
+Set @newstitle = Field(Row(@newstitles,@newscnt),"id_att")
 
 
 ]%%
@@ -139,24 +221,7 @@ ENDIF
 
 <!--END NEWS -->
 
-<!--ADVERT -->
 
-<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#efefef;margin-bottom:40px;" width="95%">
-	<tr>
-		<td align="center">
-			<img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-			<a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank">
-				<img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" border="0">
-			</a>
-		</td>
-	</tr>
-</table>
-<br>
-<!--END ADVERT -->
 
 <!--PRO -->
 %%[Var @proHeaderxml, @proHeadertitles, @proHeadercnt, @proHeaderrows, @proHeadercnt
@@ -201,9 +266,15 @@ Set @prolink = Concat(@prourlprefix,@protitleid)
 Set @prourlxml = httpget(@prourl)
 set @propromoheadline = BuildRowsetFromXML(@prourlxml,"//promotional_view/headline/link_headline",1)
 set @propromoheadlinetitle =  Field(Row(@propromoheadline,1),"Value")
-SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€”','&mdash;')
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€"','&#8212;')
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€”','&#8212;')
+
+
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,"â€¦","...")
+
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€œ','"')
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,"â€™","'")
 Set @protitle = Field(Row(@protitles,@procnt),"id_att")
-SET @protitle = REPLACE(@protitle,'â€”','&mdash;')
 
 
 ]%%
@@ -270,11 +341,23 @@ SET @videorows = RowCount(@videotitles)
 IF @videorows >= @videorows THEN
 for @videocnt = 1 to @videorows do
 Set @videotitle = Field(Row(@videotitles,@videocnt),"Value")
-SET @videotitle = REPLACE(@videotitle,"’","'")
-SET @videotitle = REPLACE(@videotitle,'â€”','&mdash;')
+SET @videotitle = REPLACE(@videotitle,'â€"','&#8212;')
+SET @videotitle = REPLACE(@videotitle,'â€”','&#8212;')
+
+SET @videotitle = REPLACE(@videotitle,'â€œ','"')
+SET @videotitle = REPLACE(@videotitle,"â€™","'")
+SET @videotitle = REPLACE(@videotitle,"â€¦","...")
+
+
 Set @videodesc = Field(Row(@videodescs,@videocnt), "Value")
-SET @videodesc = REPLACE(@videodesc,'â€”','&mdash;')
-SET @videodesc = REPLACE(@videodesc,"’","'")
+SET @videodesc = REPLACE(@videodesc,'â€"','&#8212;')
+SET @videodesc = REPLACE(@videodesc,'â€”','&#8212;')
+
+SET @videodesc = REPLACE(@videodesc,'â€œ','"')
+SET @videodesc = REPLACE(@videodesc,"â€™","'")
+SET @videodesc = REPLACE(@videodesc,"â€¦","...")
+
+
 Set @videolink = Field(Row(@videolinks,@videocnt), "Value") 
 Set @videothumb = Field(Row(@videothumbs,@videocnt), "Value")
 SET @videothumbslink = REPLACE(@videothumb,".240x160.jpg",".320x180.jpg")
@@ -352,9 +435,15 @@ Set @specialreportslink = Concat(@specialreportsurlprefix,@specialreportstitleid
 Set @specialreportsurlxml = httpget(@specialreportsurl)
 set @specialreportspromoheadline = BuildRowsetFromXML(@specialreportsurlxml,"//promotional_view/headline/link_headline",1)
 set @specialreportspromoheadlinetitle =  Field(Row(@specialreportspromoheadline,1),"Value")
-SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€”','&mdash;')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€"','&#8212;')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€”','&#8212;')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€œ','"')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,"â€™","'")
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,"â€¦","...")
+
+
+
 Set @specialreportstitle = Field(Row(@specialreportstitles,@specialreportscnt),"id_att")
-SET @specialreportstitle = REPLACE(@specialreportstitle,'â€”','&mdash;')
 
 
 ]%%
@@ -381,7 +470,7 @@ ENDIF
 
 
 <!--FOOTER -->
-<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;"><tr><td style="background:#ffffff;"><table cellpadding="20" cellspacing="0" border="0" align="center" width="100%" style="border-radius:3px; border-collapse:collapse;background:#efefef; width:80%; margin-bottom:30px;"><tr><td valign="top" style="font-family:Arial, Helvetica, sans-serif; color:#666666; text-transform:uppercase;">Feedback <p style="font-size: 14px;line-height:20px; text-transform:none;"> We value your input&mdash;use <a href="http://cnbcllca.custhelp.com/app/ask?hq_e=el&hq_m=18311&hq_l=35&hq_v=c867b09142" style="color:#2077b6;text-decoration:none;"> our simple form</a> to let us know what you think. Click <a href="http://www.cnbc.com" style="color:#2077b6;text-decoration:none;">here</a> for Real-Time data and top stories on your desktop or mobile device.</p></td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style=" border-collapse:collapse;padding-top:20px;"><tr></tr></table>
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;"><tr><td style="background:#ffffff;"><table cellpadding="20" cellspacing="0" border="0" align="center" width="100%" style="border-radius:3px; border-collapse:collapse;background:#efefef; width:80%; margin-bottom:30px;"><tr><td valign="top" style="font-family:Arial, Helvetica, sans-serif; color:#666666; text-transform:uppercase;">Feedback <p style="font-size: 14px;line-height:20px; text-transform:none;"> We value your input&#8212;use <a href="http://cnbcllca.custhelp.com/app/ask?hq_e=el&hq_m=18311&hq_l=35&hq_v=c867b09142" style="color:#2077b6;text-decoration:none;"> our simple form</a> to let us know what you think. Click <a href="http://www.cnbc.com" style="color:#2077b6;text-decoration:none;">here</a> for Real-Time data and top stories on your desktop or mobile device.</p></td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style=" border-collapse:collapse;padding-top:20px;"><tr></tr></table>
 
 <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;">
 	<tr>
@@ -423,7 +512,7 @@ ENDIF
 		</td>
 </tr></table>
 <br>
-<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a id="unsubscribe" href="%%microsite_base_url[default]48[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a href="%%microsite_base_url[default]476[/default]%%" style="color:#3da5ed;text-decoration:none;font-size:11px;">More Newsletters</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a><a class="footer-link" href="http://www.cnbc.com/digital-products/" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
 
 </td></tr></table>
 
