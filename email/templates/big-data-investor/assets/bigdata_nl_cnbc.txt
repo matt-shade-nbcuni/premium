@@ -1,0 +1,14 @@
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#efefef;margin-bottom:40px;" width="95%">
+	<tr>
+		<td align="center">
+			<img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/bigdata;site=cnbc;sect=bigdata;!c=bigdata;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank">
+				<img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/bigdata;site=cnbc;sect=bigdata;!c=bigdata;pos=1;tile=1;sz=300x250;ord=123456a" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
