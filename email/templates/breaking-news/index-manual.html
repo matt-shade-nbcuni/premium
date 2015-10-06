@@ -1,8 +1,16 @@
-%%[Var @headline, @link, @linkTracking
+%%[Var @headline, @link, @description, @linkTracking
 
 
-Set @headline = "Stocks open higher as new quarter kicks off; data in focus"
-Set @link = "http://www.cnbc.com/2015/10/01/us-markets.html"
+Set @headline = "US stocks open mildly lower; earnings eyed"
+Set @link = "http://www.cnbc.com/2015/10/06/us-markets.html"
+Set @description = "U.S. stocks traded in a narrow range, attempting to extend a sharp two-day rally, as investors awaited the official beginning of earnings season."
+
+
+
+
+
+
+
 
 
 
@@ -99,6 +107,15 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	          </td>
 	        </tr>
 	      </table>
+		  
+  	      <table cellpadding="0" cellspacing="0" border="0" >
+  	        <tr>
+  	          <td>
+				  <br>
+	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">%%=v(@description)=%%</div>
+	          </td>
+	        </tr>
+	      </table>
 		  <br>
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
@@ -112,7 +129,7 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table cellpadding="0" cellspacing="0" border="0" >
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@link)=%%">
+	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
 	              %%=v(@link)=%%
 	            </a>
 	          </td>
@@ -124,7 +141,7 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table class="button" cellpadding="0" cellspacing="0" border="0">
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@link)=%%">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
 	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/read-more-blue.png" width="150" style="width:150px;">
 	            </a>
 	          </td>
@@ -167,22 +184,22 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 				<tr>
 					<td valign="top" style="padding-right:8px;background:#ffffff;">
 						<a href="http://www.twitter.com/cnbc" style="text-decoration:none;">
-							<img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/twitter-icon-rd.png" border="0" width="30"/>
+							<img alt="twitter" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/twitter-icon-rd.png" border="0" width="30"/>
 						</a>
 					</td>
 					<td valign="top" style="background:#ffffff; padding-right:8px;">
 						<a href="http://www.facebook.com/CNBC" style="text-decoration:none;">
-							<img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/facebook-icon-rd.png" border="0" width="30"/>
+							<img alt="facebook" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/facebook-icon-rd.png" border="0" width="30"/>
 						</a>
 					</td>
 					<td valign="top" style="background:#ffffff; padding-right:8px;">
 						<a href="http://www.linkedin.com/company/cnbc" style="text-decoration:none;">
-							<img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/linkedin-icon-rd.png" border="0" width="30"/>
+							<img alt="linkedin" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/linkedin-icon-rd.png" border="0" width="30"/>
 						</a>
 					</td>
 					<td valign="top" style="background:#ffffff;">
 						<a href="https://www.reddit.com/search?q=CNBC" style="text-decoration:none;">
-							<img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/reddit-icon-rd.png" border="0" width="30"/>
+							<img alt="reddit" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/reddit-icon-rd.png" border="0" width="30"/>
 						</a>
 					</td>
 					
