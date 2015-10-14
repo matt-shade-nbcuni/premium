@@ -1,31 +1,36 @@
-%%[Var @headline, @link, @description, @linkTracking
+%%[Var @xml, @titles, @title, @descs, @desc, @links, @link, @cnt
 
-
-Set @headline = "US stocks open mildly lower; earnings eyed"
-Set @link = "http://www.cnbc.com/2015/10/06/us-markets.html"
-
-
-
-
-
-
-
+/* This line specifies the content area from which the RSS content will be pulled for the email message. */
+/* GET NEW LOCATION FROM GOPI K */
+Set @xml = ContentAreaByName("my contents\BreakingNews\BreakingNewsCAProd") 
+/*Set @xml = ContentAreaByName("my contents\BreakingNews\MyTestContent") */
+Set @titles = BuildRowsetFromXML(@xml,"//item/title",1)
+Set @descs = BuildRowsetFromXML(@xml,"//item/description",1)
+Set @links = BuildRowsetFromXML(@xml,"//item/link",1)
 
 
 
+If RowCount(@titles) > 1 THEN
+SET @rows = 1
+ELSE
+SET @rows = RowCount(@titles)
+ENDIF
 
-
+IF @rows >= 1 THEN
+for @cnt = 1 to @rows do
+Set @title = Field(Row(@titles,@cnt),"Value")
+Set @desc = Field(Row(@descs,@cnt), "Value")
+Set @link = Field(Row(@links,@cnt), "Value") 
+Set @Subject = Field(Row(@titles,@cnt),"Value")
 set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
-
-
-
 ]%%
+
 <!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>	 
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta content="width=device-width" name="viewport"/>
-	<title>CNBC | Breaking News </title>
+	<title>CNBC | Watch Live </title>
 	<style>
 	
 	table[class="wrapper"]{width:600px;}
@@ -42,7 +47,8 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
-			text-align:left!important;
+			text-align:center!important;
+			padding-bottom:30px!important;
 	    }
 		
 		
@@ -85,8 +91,8 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 		<!--MAIN HEADER -->
 			<table width="100%"  cellspacing="0" cellpadding="10" border="0" align="center">
 				<tr>
-					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#730f11;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
-			<img style="color:#ffffff;width:250px;" alt="CNBC | Breaking News"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/bn-logo.png" border="0" width="250"/>
+					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#e86525;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
+			<img style="color:#ffffff;width:200px;" alt="CNBC | Watch Live"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/watch-live-header.png" border="0" width="200"/>
 					</td>
 				</tr>
 			</table>
@@ -103,23 +109,30 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@link)=%%">%%=v(@headline)=%%</a>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@linkTracking)=%%">%%=v(@title)=%%</a>
 	          </td>
 	        </tr>
 	      </table>
 		  
-  	      
-		  <br>
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">This is a developing news story. 
-	      Please check back for updates:</div>
+				  <br>
+	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">%%=v(@desc)=%%</div>
 	          </td>
 	        </tr>
 	      </table>
+		  
+  	      <!-- <table cellpadding="0" cellspacing="0" border="0" >
+  	        <tr>
+  	          <td>
+	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">This is a developing news story.
+	      Please check back for updates:</div>
+	          </td>
+	        </tr>
+	      </table> -->
 		   <br>
-	      <table cellpadding="0" cellspacing="0" border="0" >
+	      <!-- <table cellpadding="0" cellspacing="0" border="0" >
 	        <tr>
 	          <td>
 	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
@@ -127,20 +140,33 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	            </a>
 	          </td>
 	        </tr>
-	      </table>
+	      </table> -->
 		  
 		 <br>
+		 <br>
       
-	      <table class="button" cellpadding="0" cellspacing="0" border="0">
+	      <table class="button" cellpadding="0" cellspacing="0" border="0" width="100%">
 	        <tr>
-	          <td>
+	          <td class="drop" align="center">
 	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
-	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/read-more-blue.png" width="150" style="width:150px;">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/watch-live-btn.png" width="150" style="width:150px;">
 	            </a>
+				<br>
+				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your TV provider</div>
+	          </td>
+	          <td class="drop" align="center">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-pro-btn.png" width="150" style="width:150px;">
+	            </a>
+				<br>
+				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your PRO subscription</div>
 	          </td>
 	        </tr>
 	      </table>
- 		 <br>
+		  
+	      
+		  
+ 		 
  		 <br>
 		 <br>
 	      <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -159,6 +185,10 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	<br>	
 <!--END BREAKING CONTENT -->
 
+%%[ 
+NEXT @cnt 
+ENDIF
+]%%
 
 <div style="clear:both;"></div>
 
