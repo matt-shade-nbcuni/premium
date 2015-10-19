@@ -254,8 +254,24 @@ Set @firstoptionsurlxml = httpget(@firstoptionsurl)
 set @firstoptionspromoheadline = BuildRowsetFromXML(@firstoptionsurlxml,"//promotional_view/headline/shortest_headline",1)
 set @firstoptionspromoheadlinetitle =  Field(Row(@firstoptionspromoheadline,1),"Value")
 Set @firstoptionstitle = Field(Row(@firstoptionstitles,@firstoptionscnt),"id_att")
+
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,'â€"','&#8212;')
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,'â€”','&#8212;')
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,'â€œ','"')
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,"â€™","'")
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,"â€™","'")
+SET @firstoptionstitle = REPLACE(@firstoptionstitle,"â€¦","...")
+
 Set @firstoptionsdesc = BuildRowsetFromXML(@firstoptionsurlxml,"//promotional_view/description/seo_description",1)
 Set @firstoptionsdesc = Field(Row(@firstoptionsdesc,1),"Value")
+
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,'â€"','&#8212;')
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,'â€”','&#8212;')
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,'â€œ','"')
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,"â€™","'")
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,"â€™","'")
+SET @firstoptionsdesc = REPLACE(@firstoptionsdesc,"â€¦","...")
+
 Set @firstoptionsbyline = BuildRowsetFromXML(@firstoptionsurlxml,"//attribution/author/asset/name",1)
 Set @firstoptionsbyline = Field(Row(@firstoptionsbyline,1),"Value")
 
@@ -318,6 +334,14 @@ Set @optionslink = Concat(@optionsurlprefix,@optionstitleid)
 Set @optionsurlxml = httpget(@optionsurl)
 set @optionspromoheadline = BuildRowsetFromXML(@optionsurlxml,"//promotional_view/headline/link_headline",1)
 set @optionspromoheadlinetitle =  Field(Row(@optionspromoheadline,1),"Value")
+
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,'â€"','&#8212;')
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,'â€”','&#8212;')
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,'â€œ','"')
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,"â€™","'")
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,"â€™","'")
+SET @optionspromoheadlinetitle = REPLACE(@optionspromoheadlinetitle,"â€¦","...")
+
 Set @optionstitle = Field(Row(@optionstitles,@optionscnt),"id_att")
 
 
