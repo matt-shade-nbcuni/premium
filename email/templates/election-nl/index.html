@@ -1,20 +1,22 @@
 %%[Var @xml, @titles, @title, @descs, @desc, @links, @link, @cnt
-Set @xml = httpget('http://www.cnbc.com/id/103036129/device/rss')
+Set @xml = httpget('http://www.cnbc.com/id/103092882/device/rss')
 Set @titles = BuildRowsetFromXML(@xml,"//channel/item/title",1)
 Set @descs = BuildRowsetFromXML(@xml,"//channel/item/description",1)
 Set @links = BuildRowsetFromXML(@xml,"//channel/item/link",1)
 
 
-SET @rows = RowCount(@titles)
+/* SET @rows = RowCount(@titles) */
+
+SET @rows = 8
+
+
 ]%%
-
-
 <!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>	 
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta content="width=device-width" name="viewport"/>
-	<title>CNBC | Election </title>
+	<title>CNBC | Your Money Your Vote </title>
 	<style>
 	
 	table[class="wrapper"]{
@@ -48,7 +50,7 @@ SET @rows = RowCount(@titles)
 			margin-top:4px;
 		}
 			img[class="header-logo"]{
-				width:250px!important;;
+				width:300px!important;;
 			}
 			
 			table { 
@@ -74,8 +76,21 @@ SET @rows = RowCount(@titles)
 		<!--MAIN HEADER -->
 			<table width="100%"  cellspacing="0" cellpadding="10" border="0" align="center">
 				<tr>
-					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#0d3d61;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
-			<img style="color:#ffffff;width:250px;" alt="CNBC | Election"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/gop-debate-standup-header.png" border="0" width="250"/>
+					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#ffffff;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
+			            <table cellpadding="0" cellspacing="0" border="0" align="center">
+			              <tr>
+			                 <td height="10">
+				  
+			                  </td>
+			               </tr>
+			            </table>
+			<img style="color:#ffffff;width:350px;" alt="CNBC | Your Money Your Vote"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/your-money-your-vote.png" border="0" width="350"/>
+			<hr style="border: 0px; width: 100%; color: #ba2c29; height: 2px; background-color: #ba2c29; margin-bottom:0px; margin-top:5px;" />
+			<hr style="border: 0px; width: 100%; color: #204e94; height: 2px; background-color: #204e94; margin-bottom:0px; margin-top:2px;" />
+			
+			<!-- <hr style="border: 2px solid; width: 100%; color: #204e94; height: 2px; background-color: #204e94; margin-bottom:0px; margin-top:2px;" /> -->
+			
+			
 					</td>
 				</tr>
 			</table>
