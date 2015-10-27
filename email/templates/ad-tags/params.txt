@@ -1,0 +1,4 @@
+e=%%emailaddr%%
+p=%%jobid%%
+
+{LIST_ID} = newsletter name

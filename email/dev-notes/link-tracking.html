@@ -1,0 +1,32 @@
+var @linkObject, @o, @p, @m, @result, @videoLink, @noVideoLink, @concatLink, @linkObjectp, @pd, @mmm
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@ywlink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@ywlink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@ywlink, @pd, 0 , "IgnoreCase")
+
+set @videoLink = "&__source=newsletter|*newsletter name*"
+set @noVideoLink ="?__source=newsletter|*newsletter name*"
+
+
+IF @m == "/video.cnbc.com/" THEN
+		set @ywlink = concat(@ywlink,@videoLink)
+	]%%
+	
+	%%[ ELSEIF @mm == "www.cnbc.com" THEN
+		set @ywlink = concat(@ywlink,@noVideoLink)
+	]%%	
+
+	
+	%%[ ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @ywlink = concat(@ywlink,@noVideoLink)
+	]%%	
+	
+	
+	%%[ ELSE 
+	set @ywlink = concat(@ywlink)
+set @m ="no match"
+
+	]%%
