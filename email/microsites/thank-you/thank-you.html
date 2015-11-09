@@ -1,0 +1,422 @@
+%%[
+set @encGuid = RequestParameter("encData")
+set @today = NOW()
+set @today = DateAdd(@today,"2","H")
+
+if not empty(@encGuid) then
+
+set @guid = DecryptSymmetric(@encGuid, "AES", @null, "booyahmm", @null, "0000000000000000", @null, "00000000000000000000000000000000")
+
+set @checkboxparameter = RequestParameter ("checkboxparameter")
+
+
+Set @checkboxparameter = Substring(@checkboxparameter,1,Subtract(Length(@checkboxparameter),1))
+Set @queryparams = BuildRowsetFromString(@checkboxparameter,"|")
+
+
+for @i = 1 to Rowcount(@queryparams) do
+    Set @row = Row(@queryparams, @i)
+    Set @subscriptionID = Field(@row,1)
+
+    set @subscriptionOptIn = RequestParameter(@subscriptionID)
+    set @status = RequestParameter(Concat(@subscriptionID,"_isactive"))
+    
+    if not empty(@subscriptionOptIn) then
+    	set @optin = "1"
+    else
+    	set @optin = "0"
+    endif
+	
+    if @optin == "1" then 
+       set @unsubdate = ""
+       set @subdate = @today
+       set @actionType = "s"
+    else
+       set @unsubdate = @today
+       set @actionType = "u"
+    endif
+
+   set @userSubscriptions = LookupRows("User_Subscriptions_CNBC","guid",@guid,"subscriptionId",@subscriptionID)
+   set @userSubscriptionsRC = rowcount(@userSubscriptions)
+              
+   if @userSubscriptionsRC > 0 then
+        set @source = Field(Row(@userSubscriptions, 1),"source")
+
+	if @optin == "1" then
+		set @source = "ProfileCenter"
+	endif
+	
+	if @optin == "0" then
+		set @subdate = Field(Row(@userSubscriptions, 1),"subdate")  
+	endif      
+   endif
+
+if @status != @optin then
+
+   if @optin == "1" then
+    UpsertData(
+	"User_Subscriptions_CNBC",2,
+	"guid",@guid,
+	"subscriptionId",@subscriptionID,
+	"isactive",@optin,
+        "subdate",@subdate,
+    	"lastmodified",@today,
+	"source","ProfileCenter"
+    )
+    else
+    UpsertData(
+	"User_Subscriptions_CNBC",2,
+	"guid",@guid,
+	"subscriptionId",@subscriptionID,
+	"isactive",@optin,
+        "subdate",@subdate,
+        "unsubdate",@unsubdate,
+    	"lastmodified",@today,
+	"source","ProfileCenter"
+    )
+    endif
+
+    InsertData(
+	"User_Subscriptions_History_CNBC",
+	"guid",@guid,
+	"subscriptionId",@subscriptionID,
+	"isactive",@optin,
+        "actiondate",@today,
+        "actiontype",@actionType,
+        "source","ProfileCenter"
+    )
+endif
+
+next @i
+
+endif
+
+
+]%%
+    <!doctype html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>CNBC Newsletter Preference Center</title>
+    <link href="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/INTERNAL/EXPERIMENTS/GOTHAM/HCo_fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/EMAIL/EXACT-TARGET/FORMS/CNBC-API/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/EMAIL/EXACT-TARGET/FORMS/CNBC-API/css/bootstrap-select.css.map" rel="stylesheet" />
+    <style>
+* {margin:0;padding:0;} 
+.GNSSm3r {
+	font-family: 'Gotham Narrow SSm 3r';
+	font-weight: normal;
+	font-style: normal;
+}
+.GNSSm4r {
+	font-family: 'Gotham Narrow SSm 4r';
+	font-weight: normal;
+	font-style: normal;
+}
+.GNSSm5r {
+	font-family: 'Gotham Narrow SSm 5r';
+	font-weight: normal;
+	font-style: normal;
+}
+.GNSSm7r {
+	font-family: 'Gotham Narrow SSm 7r';
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	color: #333;
+	font-family: 'Gotham Narrow SSm 4r';
+	font-weight: normal;
+	font-style: normal;
+	padding-top: 70px;
+}
+a {
+	color: #2077b6;
+	text-decoration: none;
+}
+a:hover {
+	color: #C34C28;
+	text-decoration: none;
+}
+.has-error label, .has-error .with-errors, .has-error {
+	color: orangered;
+}
+.required {
+	float: none!important;
+	color: orangered;
+}
+.blank-email-error, .subscriptions-alert {
+	display: none;
+}
+.newsletter-choice, .newsletter-info {
+	float: left;
+	cursor: pointer;
+	font-weight: normal;
+}
+.newsletter-info h2 {
+	margin-top: 0px;
+	font-size: 1.4em;
+	font-family: 'Gotham Narrow SSm 5r';
+	font-weight: normal;
+	font-style: normal;
+}
+/*.newsletter-info small{margin-left:5px;}*/
+.checkbox, .bootstrap-select.btn-group .btn .filter-option {
+	font-weight: normal!important;
+	letter-spacing: 0px;
+}
+.checkbox {
+	border: #efefef solid 1px;
+	padding: .5em;
+	border-radius: 3px;
+	min-height: 80px;
+}
+.bootstrap .btn {
+	height: auto;
+	border-color: #efefef;
+}
+#nl-submit, .btn.modal-button {
+	height: auto;
+	border-color: #b0b9bd;
+	color: white;
+	background: #b0b9bd;
+	text-transform: uppercase;
+	font-weight: normal;
+	letter-spacing: 0px;
+}
+#nl-submit:hover, .btn.modal-button:hover {
+	background: #2aa6e7;
+	border-color: #2aa6e7;
+}
+/*.bootstrap .btn:hover{background:#efefef;}*/
+.checkbox label {
+	width: 100%;
+}
+.modal-header {
+	border-bottom: none;
+}
+.modal-footer {
+	border-top: none;
+	text-align: center;
+}
+.modal-content {
+	border-radius: 3px;
+}
+/*h1{border-bottom:4px solid #CCD6DB;padding-bottom:10px;}*/
+h1, h2, h3 {
+	font-weight: normal;
+}
+h3 {
+	font-size: 18px;
+	line-height: 26px;
+	margin-top: 0px;
+}
+h2 {
+	font-size: 12px;
+}
+.col-head {
+	font-size: 24px;
+	color: white;
+	margin-top: 5px;
+}
+#free {
+	color: #146195;
+	margin-top: 10px;
+}
+#pro {
+	color: #3cb878;
+	margin-top: 30px;
+}
+.btn-primary {
+	padding: 15px;
+	background: #3da5ed;
+	border-radius: 3px;
+	border: none;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	text-transform: uppercase;
+	margin-top: 30px;
+}
+.btn-primary:hover {
+	background: #3792d4
+}
+.navbar-default {
+	background: #146195;
+	padding-bottom: 20px;
+}
+h1.title {
+	font-size: 2em;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+.well {
+	border: 0;
+	background: white;
+	box-shadow: none;
+}
+/*FOOTER*/
+.footer li {
+	line-height: 24px;
+}
+.footer li a {
+	color: white;
+text-decoration:none:;
+}
+.footer li a:hover {
+	color: #c7d759;
+}
+.footer .container {
+	background: #215a7a;
+}
+.footer .row {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+footer .row.bottom, footer .bottom .container {
+	background: #14222b;
+}
+footer .row.bottom {
+	padding: 40px 0px 40px 0px;
+	color: #48565f;
+}
+footer .bottom a {
+	color: #3aacd7;
+	text-decoration: none;
+}
+.disclaimer-header {
+	margin-bottom: 15px;
+}
+.row.disclaimer {
+	margin-top: 30px;
+}
+.data-info {
+	margin-top: 20px;
+}
+#footer-logo {
+	background: transparent url('http://fm.cnbc.com/applications/cnbc.com/staticcontent/img/footer-sprite.png') no-repeat -2px -54px;
+	height: 58px;
+	width: 70px;
+	float: left;
+	margin-bottom: 30px;
+}
+.footer .container-fluid {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+.footer {
+
+}
+.footer .list-inline {
+	margin-left: 20px;
+}
+/*END FOOTER*/
+
+/*STICKY FOOTER*/
+html, body {
+	height: 100%;
+	margin:0;
+}
+#wrap {
+	min-height: 100%;
+}
+#main {
+	overflow: auto;
+	padding-bottom: 325px; /* this needs to be bigger than footer height*/
+}
+.footer {
+	position: relative;
+	margin-top: -325px; /* negative value of footer height */
+	height: 325px;
+	clear: both;
+
+}
+
+/*END STICKY FOOTER*/
+
+
+@media (max-width: 992px) {
+.footer .list-inline {
+	margin-left: 0px;
+}
+}
+
+.navbar-header, .navbar-brand{float:none;}
+.navbar-brand>img {
+  display: inline-block;
+margin-top:10px;
+}
+</style>
+    </head>
+    
+    <body>
+<div id="wrap">
+
+<div id="main">    
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header" style="text-align:center;"> <a class="navbar-brand" href="http://www.cnbc.com"> <img id="cnbc-logo" src="//fm.cnbc.com/applications/cnbc.com/staticcontent/img/cnbc-hdr-logo2.png" width="189" height="49" title="CNBC" alt="CNBC"></a> </div>
+      </div>
+    </nav>
+
+      <div class="container">
+      <div style="height:80px;"></div>
+      %%[ if not empty(@encGuid) then ]%%
+      <h1 class="title text-center">Thank You!</h1>
+      <a href="http://cnbc.com" class="btn btn-primary btn-lg center-block" style="width:300px;margin-left:auto;margin-right:auto;margin-bottom:40px;">Take Me to cnbc.com</a><h1 class="text-center">It may take up to 24 hours to process this request.</h1> %%[ else ]%%
+      <h1>Error</h1>
+      <h3>It looks like something has gone wrong.</h3>
+      %%[ endif ]%%
+      <div style="height:40px;"></div>
+      </div>
+</div>
+</div>
+<footer class="footer">
+      <div class="container-fluid">
+        <div class="row bottom">
+          <div class="col-md-12" style="margin:0 auto;">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-1 col-sm-12 col-xs-12 "> <a id="footer-logo" href="http://www.cnbc.com"></a> </div>
+                <ul class="list-inline col-md-10 col-sm-12 hidden-xs col-lg-10">
+                  <li><a href="http://www.cnbc.com/id/15907487">About CNBC</a></li>
+                  <li><a href="http://www.cnbc.com/id/15920090">Site Map</a></li>
+                  <li><a href="http://videoreprints.cnbc.com/">Video Reprints</a></li>
+                  <li><a href="http://cnbcmediasales.com/">Advertise</a></li>
+                  <li><a href="https://sjobs.brassring.com/1033/ASP/TG/cim_searchresults.asp?PartnerId=25354&SiteId=5108&Function=LinkQuery&LinkId=495">Careers</a></li>
+                  <li><a href="http://cnbcllca.custhelp.com/">Help</a></li>
+                  <li><a href="http://cnbcllca.custhelp.com/app/ask">Contact</a></li>
+                  <li><a href="http://www.cnbc.com/id/25097425">Corrections</a></li>
+                </ul>
+                <ul class="list-inline col-md-10 col-sm-12 col-xs-6 col-lg-10">
+                  <li><a href="http://nbcuni.com/privacy">Privacy Policy</a></li>
+                  <li><a href="http://info.evidon.com/pub_info/793?v=1&nt=0&nw=true"><img id="_bapw-icon" style="" src="http://cdn.betrad.com/pub/icon1.png"><span>AdChoices</span></a></li>
+                  <li><a href="http://www.cnbc.com/id/15837353/">Terms of Service</a></li>
+                  <li><a href="http://corporate.comcast.com/news-information/nbcuniversal-transaction/independent-programming">Independent Programming Report</a></li>
+                  <li><a href="http://www.cnbc.com/id/17362414">Latest News Releases</a></li>
+                  <li><a href="http://www.cnbc.com/id/28295763">RSS</a></li>
+                </ul>
+              </div>
+              <div class="row data-info">
+                <div class="col-md-12"> Data is a real-time snapshot *Data is delayed at least 15 minutes<br>
+                  Global Business and Financial News, Stock Quotes, and Market Data and Analysis </div>
+              </div>
+              <div class="row disclaimer">
+                <div class="col-md-6 col-sm-6 col-xs-6" >
+                  <div class="disclaimer-header">&copy; 2015 CNBC LLC. All Rights Reserved.</div>
+                  <a href="http://www.nbcuni.com/" id="nbcuniversal-logo" > <img class="img-responsive" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/EMAIL/EXACT-TARGET/PROFILE-CENTER/nbcuni-logo.png"> </a> </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right"  class="pull-right">
+                <div class="disclaimer-header">Data also provided by:</div>
+                <a href="http://www.cnbc.com/id/16061983/" id="thompson-logo" class="pull-right"> <img class="img-responsive" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/EMAIL/EXACT-TARGET/PROFILE-CENTER/thompson-logo.png"> </a> </div>
+            </div>
+            <!-- .end disclaimer --> 
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    </body>
+    </html>

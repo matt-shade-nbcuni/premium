@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
 	<meta content="width=device-width" name="viewport"/> 
-	<title>CNBC | Your Wealth</title>
+	<title>CNBC | Your Wealth </title>
 	<style>
 	div[class="group-container"]{clear:both!important;}
 	table[class="wrapper"]{
@@ -157,11 +157,11 @@ Set @storybody = REPLACE(@storybody,"</h4>","<hr style='border:0px; width:100%; 
 						<tr>
 							<td align="center">
 					<div style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; color#424858;margin-bottom:5px;">
-						<a style="text-decoration: none; color: #2d648a; font-family: Helvetica, Arial, sans-serif; font-size: 12px;" href="http://www.cnbc.com/financial-advisors/">
+						<a style="text-decoration: none; color: #2d648a; font-family: Helvetica, Arial, sans-serif; font-size: 12px;" href="http://www.cnbc.com/financial-advisors/?__source=newsletter|yourwealth">
 							For more, check out CNBC's
 						</a>
 					</div>
-					<a style="text-decoration: none;" href="http://www.cnbc.com/financial-advisors/">
+					<a style="text-decoration: none;" href="http://www.cnbc.com/financial-advisors/?__source=newsletter|yourwealth">
 						<img width="120" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/fa-hub-btn.png">
 					</a>
 							</td>
@@ -251,31 +251,26 @@ set @m = RegExMatch(@ywlink, @p, 0 , "IgnoreCase")
 set @mm = RegExMatch(@ywlink, @linkObjectp, 0 , "IgnoreCase")
 set @mmm = RegExMatch(@ywlink, @pd, 0 , "IgnoreCase")
 
-set @videoLink = "&__source=newsletter|*newsletter name*"
-set @noVideoLink ="?__source=newsletter|*newsletter name*"
+set @videoLink = "&__source=newsletter|yourwealth"
+set @noVideoLink ="?__source=newsletter|yourwealth"
 
 /* check to see if length of pattern is greater than 0 */
 IF @m == "/video.cnbc.com/" THEN
-		set @ywlink = concat(@ywlink,@videoLink)
-	]%%
+		set @ywlink = concat(@ywlink,@videoLink)	
 	
-	%%[ ELSEIF @mm == "www.cnbc.com" THEN
+	 ELSEIF @mm == "www.cnbc.com" THEN
 		set @ywlink = concat(@ywlink,@noVideoLink)
-	]%%	
-
 	
-	%%[ ELSEIF @mmm == "/data.cnbc.com/" THEN
-		set @ywlink = concat(@ywlink,@noVideoLink)
-	]%%	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @ywlink = concat(@ywlink,@noVideoLink)	
 	
-	
-	%%[ ELSE 
+	 ELSE 
 	set @ywlink = concat(@ywlink)
 set @m ="no match"
 
-	]%%
 	
-%%[ ENDIF ]%%
+	
+ENDIF
 
 
 
@@ -348,7 +343,9 @@ Set @joshbody = REPLACE(@joshbody,"</h4>","<hr style='border:0px; width:100%; co
 
 <!--AD -->
 
-<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#ffffff;padding-bottom:25px;margin-top:30px;" width="100%"><tbody><tr><td align="center"><img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/></td></tr><tr><td align="center"><a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/yourwealth;site=cnbc;sect=yourwealth;!c=yourwealth;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank"><img width="250"  style="" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/yourwealth;site=cnbc;sect=yourwealth;!c=yourwealth;pos=1;tile=1;sz=300x250;ord=123456" border="0"></a><br></td></tr></tbody></table>
+<!-- <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#ffffff;padding-bottom:25px;margin-top:30px;" width="100%"><tbody><tr><td align="center"><img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/></td></tr><tr><td align="center"><a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/yourwealth;site=cnbc;sect=yourwealth;!c=yourwealth;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank"><img width="250"  style="" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/yourwealth;site=cnbc;sect=yourwealth;!c=yourwealth;pos=1;tile=1;sz=300x250;ord=123456" border="0"></a><br></td></tr></tbody></table> -->
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" ><tr><td colspan="2"><a style="display: block; width: 300px; height: 250px;" href="http://li.cnbc.com/click?s=158851&sz=300x250&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=158851&sz=300x250&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" border="0" width="300" height="250"/></a></td></tr><tr style="display:block; height:1px; line-height:1px;"><td><img src="http://li.cnbc.com/imp?s=160043&sz=1x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" height="1" width="10" /></td><td><img src="http://li.cnbc.com/imp?s=160044&sz=1x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" height="1" width="10" /></td></tr><tr><td align="left"><a href="http://li.cnbc.com/click?s=121685&sz=116x15&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=121685&sz=116x15&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" border="0"/></a></td><td align="right"><a href="http://li.cnbc.com/click?s=121686&sz=69x15&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=121686&sz=69x15&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" border="0"/></a></td></tr></table>
 <br>
 <!--END AD -->
 
@@ -477,7 +474,7 @@ Set @joshbody = REPLACE(@joshbody,"</h4>","<hr style='border:0px; width:100%; co
 		</td>
 </tr></table>
 <br>
-<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a><a class="footer-link" href="http://www.cnbc.com/digital-products/" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com?__source=newsletter|yourwealth"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a><a class="footer-link" href="http://www.cnbc.com/digital-products/?__source=newsletter|yourwealth" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
 
 </td></tr></table>
 
@@ -492,9 +489,9 @@ Set @joshbody = REPLACE(@joshbody,"</h4>","<hr style='border:0px; width:100%; co
 		</tr>
 	</table>
 <!--END MAIN WRAPPER -->
+
+<table cellpadding="0" cellspacing="0" border="0" width="40" height="6"><tbody><tr><td><img src="http://li.cnbc.com/imp?s=124081100&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081101&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081102&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081103&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081104&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081105&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081106&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081107&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081108&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081109&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081110&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081111&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081112&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081113&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081114&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081115&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081116&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081117&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081118&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=124081119&sz=2x1&li=yourwealth&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td></tr></tbody></table>
 </body>
 </html>
-
-
 
 

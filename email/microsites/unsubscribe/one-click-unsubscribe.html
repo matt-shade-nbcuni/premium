@@ -1,0 +1,347 @@
+%%[
+SET @guid= Replace(Replace(RequestParameter("guid"),"-","="),'%20%2B','+')
+SET @Sid = Replace(Replace(RequestParameter("sid"),"-","="),'%20%2B','+')
+set @guid = DecryptSymmetric(@guid, "AES", @null, "booyahmm", @null, "0000000000000000", @null, "00000000000000000000000000000000")
+set @sid = DecryptSymmetric(@sid, "AES", @null, "booyahmm", @null, "0000000000000000", @null, "00000000000000000000000000000000")
+
+If @Sid == "40000020" Then
+	SET @SUBID="40000020|40000010|40000011|40000012"
+	SET @CheckedValues = BuildRowsetFromString(@SUBID,"|")
+	For @i = 1 to Rowcount(@CheckedValues) DO
+		SET @Row = Row(@CheckedValues, @i)
+		SET @CheckID = Field(@Row,1)
+		IF Not Empty(@CheckID) Then 
+			SET @Unsub_data = UpsertData("User_Subscriptions_CNBC",2,"guid",@guid,"subscriptionId",@CheckID,"isactive","0","unsubdate",NOW(),"lastmodified",NOW())
+			SET @CNBC_Rows = LookUpRows("User_Subscriptions_CNBC","guid",@guid,"subscriptionId",@CheckID)
+			IF RowCount(@CNBC_Rows) > 0 Then
+				SET @Row = Row(@CNBC_Rows,1)
+				SET @source = Field(@ROW,"source")
+				SET @additionalsourceinfo = Field(@ROW,"additionalsourceinfo")
+				SET @actiondate = Field(@ROW,"unsubdate")
+				SET @actiontype = "U"
+				
+				SET @license = Field(@ROW,"license")
+				SET @price = Field(@ROW,"price")
+				
+				SET @Unsub_data = InsertData("User_Subscriptions_History_CNBC","guid",@guid,"subscriptionId",@CheckID,"isactive","0","source",@source,"additionalsourceinfo",@additionalsourceinfo,"actiondate",@actiondate,"actiontype","U","license",@license,"price",@price)
+				
+			ENDIF
+		EndIF
+	Next @i	
+Else
+
+	SET @Unsub_data = UpsertData("User_Subscriptions_CNBC",2,"guid",@guid,"subscriptionId",@sid,"isactive","0","unsubdate",NOW(),"lastmodified",NOW())
+
+	SET @CNBC_Rows = LookUpRows("User_Subscriptions_CNBC","guid",@guid,"subscriptionId",@sid)
+
+	IF RowCount(@CNBC_Rows) > 0 Then
+
+		SET @Row = Row(@CNBC_Rows,1)
+		SET @source = Field(@ROW,"source")
+		SET @additionalsourceinfo = Field(@ROW,"additionalsourceinfo")
+		SET @actiondate = Field(@ROW,"unsubdate")
+		SET @actiontype = "U"
+		
+		SET @license = Field(@ROW,"license")
+		SET @price = Field(@ROW,"price")
+		
+		SET @Unsub_data = InsertData("User_Subscriptions_History_CNBC","guid",@guid,"subscriptionId",@sid,"isactive","0","source",@source,"additionalsourceinfo",@additionalsourceinfo,"actiondate",@actiondate,"actiontype","U","license",@license,"price",@price)
+	ENDIF
+ENDIF
+
+/*Unsub Log Event Goes Here*/
+
+]%%
+
+	<!DOCTYPE html>
+	<html lang="en">
+    <head>
+    <title>You Have Been Unsubscribed.</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/INTERNAL/EXPERIMENTS/GOTHAM/HCo_fonts.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+body {
+	color: #424858;
+	font-family: 'Gotham Narrow SSm 4r';
+	font-weight: normal;
+	font-style: normal;
+}
+a {
+	color: #2d648a;
+}
+a:hover, .navbar-default .navbar-nav>li>a:hover {
+	color: #c34c28;
+}
+.navbar {
+	border-radius: 0px;
+}
+.navbar-default .navbar-collapse, .navbar-default {
+	border: none;
+}
+.navbar-default .navbar-nav>li>a:hover {
+	background: white;
+	border-bottom: none;
+}
+.navbar {
+	min-height: 72px;
+	background: #146195;
+}
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover {
+	color: #c34c28;
+	background: white;
+}
+.navbar-nav {
+	margin-top: 16px;
+}
+/*.navbar-nav li a {line-height: 50px;}*/
+.navbar-default .navbar-nav>li>a {
+	color: white;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+.navbar-nav>li>a {
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 21px;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+.navbar-nav>li>.dropdown-menu {
+	border: none;
+}
+.dropdown-menu>li>a {
+	padding: 8px 15px;
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #2d648a;
+}
+.dropdown-menu>li>a:hover {
+	background: white;
+	color: #c34c28;
+}
+h1 {
+	display: block;
+	font-size: 42px;
+	text-align: center;
+	padding-bottom: 58px;
+}
+h2 {
+	border-bottom: 4px solid #CCD6DB;
+	padding-bottom: 20px;
+	text-align: center;
+	margin-bottom: 30px!important;
+}
+.fa {
+	color: #3cb878;
+}
+#lead {
+	margin-bottom: 100px;
+	margin-top: 80px;
+	font-family: 'Gotham Narrow SSm 5r';
+}
+.newsletter label {
+	color: #333;
+	display: block;
+	cursor: pointer;
+	padding: 10px 10px 10px 30px!important;
+	font-size: 1em;
+}
+.newsletter .checkbox span {
+	font-size: 1.5em;
+}
+.newsletter .checkbox {
+	background: #efefef;
+	border-radius: 3px;
+}
+.selected {
+	background: #2aa6e7;
+	border-radius: 3px;
+	color: white!important;
+}
+.selected-wrapper {
+	background: #e9f5ef;
+	border-radius: 3px;
+}
+.form-group {
+	color: grey!important;
+}
+/*STICKY FOOTER*/
+html, body {
+	height: 100%;
+	margin:0;
+}
+#wrap {
+	min-height: 100%;
+}
+#main {
+	overflow: auto;
+	padding-bottom: 234px; /* this needs to be bigger than footer height*/
+}
+.cnbc-new-footer {
+	position: relative;
+	margin-top: -234px; /* negative value of footer height */
+	height: 234px;
+	clear: both;
+
+}
+
+/*END STICKY FOOTER*/
+.form {
+	margin-top: 30px;
+}
+.btn {
+	height: auto;
+	text-transform: uppercase;
+}
+#optIn-mainSubmit.btn {
+	font-size: 2em;
+	background: #3d9cde;
+	margin-top: 40px;
+	margin-bottom: 200px;
+	border: none;
+}
+#optIn-mainSubmit.btn:hover {
+	background: #2aa6e7;
+}
+.row {
+	margin-bottom: 0px;
+}
+footer {
+	background: #215a7a;
+}
+footer a {
+	color: white;
+}
+footer a:hover {
+	color: #efda4d;
+}
+footer .bottom {
+	background: #14222b;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	color: #48565f;
+}
+footer .bottom a {
+	color: #3aacd7;
+}
+footer .data-info {
+	padding-bottom: 10px;
+}
+footer.top {
+	padding-top: 30px;
+}
+#footer-logo {
+	margin-bottom: 15px;
+	padding-right: 20px;
+	display: block;
+}
+.seven-cols .col-sm-1 {
+	width: auto;
+	padding-bottom: 10px;
+}
+footer .bottom .secondary-links {
+	padding-left: 30px;
+}
+
+@media (min-width: 850px) {
+.newsletter-description {
+	min-height: 80px;
+	padding-top: 5px;
+}
+}
+
+@media (min-width: 1200px) {
+.seven-cols .col-lg-1 {
+	width: 14.285714285714285714285714285714%;
+ *width: 14.285714285714285714285714285714%;
+}
+}
+
+@media (max-width: 1000px) {
+.navbar-header {
+	float: none;
+}
+.navbar-left, .navbar-right {
+	float: none !important;
+}
+.navbar-toggle {
+	display: block;
+}
+.navbar-fixed-top {
+	top: 0;
+	border-width: 0 0 1px;
+}
+.navbar-collapse.collapse {
+	display: none!important;
+}
+.navbar-nav {
+	float: none!important;
+	margin-top: 7.5px;
+}
+.navbar-nav>li {
+	float: none;
+}
+.navbar-nav>li>a {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.collapse.in {
+	display: block !important;
+}
+}
+
+@media (min-width: 768px) {
+.navbar-right .dropdown-menu {
+	right: auto;
+	left: 0;
+}
+}
+
+@media (max-width: 992px) {
+footer .bottom .secondary-links {
+	padding-left: 15px;
+}
+}
+
+.navbar-header, .navbar-brand{float:none;}
+.navbar-brand>img {
+  display: inline-block;
+margin-top:10px;
+}
+#lead{margin-top:200px;}
+</style>
+    </head>
+    <body>
+<div id="wrap">
+<div id="main">
+   
+
+<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header" style="text-align:center;"> <a class="navbar-brand" href="http://www.cnbc.com"> <img id="cnbc-logo" src="//fm.cnbc.com/applications/cnbc.com/staticcontent/img/cnbc-hdr-logo2.png" width="189" height="49" title="CNBC" alt="CNBC"></a> </div>
+      </div>
+    </nav>
+
+    <h1 id="lead" class="text-center"> <i class="fa fa-check-circle"></i> <span>You have been unsubscribed.</span> </h1>
+<h1 class="text-center">It may take up to 24 hours to process this request.</h1>
+    </div>
+</div>
+    %%=HTTPGet("http://www.cnbc.com/component/footer")=%%
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> 
+    <script src="http://image.s7.exacttarget.com/lib/fe9b13727560077e74/m/1/dropdown.js"></script> 
+    <script>
+		$(document).ready(function() {
+			$('.dropdown-toggle').dropdownHover().dropdown();
+			  $(".checkbox input").change(function() {
+				  $(this).parent().toggleClass('selected');
+					$(this).parent().parent().parent().toggleClass('selected-wrapper');
+				});
+		});
+	</script>
+    </body>
+    </html>

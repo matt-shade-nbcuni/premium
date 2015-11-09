@@ -1,27 +1,29 @@
-%%[Var @xml, @titles, @title, @descs, @desc, @links, @link, @cnt
 
-/* This line specifies the content area from which the RSS content will be pulled for the email message. */
-Set @xml = ContentAreaByName("my contents\BreakingNews\BreakingNewsCAProd") 
-/*Set @xml = ContentAreaByName("my contents\BreakingNews\MyTestContent") */
-Set @titles = BuildRowsetFromXML(@xml,"//item/title",1)
-Set @descs = BuildRowsetFromXML(@xml,"//item/description",1)
-Set @links = BuildRowsetFromXML(@xml,"//item/link",1)
+%%[Var @headline, @link
 
 
 
-If RowCount(@titles) > 1 THEN
-SET @rows = 1
-ELSE
-SET @rows = RowCount(@titles)
-ENDIF
+set @newsRows = LookupRows("BreakingNews","Type","BreakingNews")
+set @newsRowCount = Rowcount(@newsRows)
 
-IF @rows >= 1 THEN
-for @cnt = 1 to @rows do
-Set @title = Field(Row(@titles,@cnt),"Value")
-Set @desc = Field(Row(@descs,@cnt), "Value")
-Set @link = Field(Row(@links,@cnt), "Value") 
-Set @Subject = Field(Row(@titles,@cnt),"Value")
-set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
+if @newsRowCount > 0 then
+    set @BreakingHeadline = Field(Row(@newsRows, 1),"headline")
+    set @BreakingExcerpt = Field(Row(@newsRows, 1),"excerpt")
+    set @BreakingLink = Field(Row(@newsRows, 1),"url")
+    set @BreakingLinkTracking = Concat(@BreakingLink,"?__source=newsletter|breakingnews")
+    set @BreakingImage = Field(Row(@newsRows, 1),"image")
+    set @BreakingDate = Field(Row(@newsRows, 1),"pubdate")
+	
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€"','&#8212;')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€”','&#8212;')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€œ','"')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,"â€™","'")
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,"â€¦","...")
+	
+endif
+
+set @subjectline = @BreakingHeadline
+
 ]%%
 
 <!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
@@ -107,19 +109,11 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@linkTracking)=%%">%%=v(@title)=%%</a>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">%%=v(@BreakingHeadline)=%%</a>
 	          </td>
 	        </tr>
 	      </table>
 		  
-  	      <table cellpadding="0" cellspacing="0" border="0" >
-  	        <tr>
-  	          <td>
-				  <br>
-	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">%%=v(@desc)=%%</div>
-	          </td>
-	        </tr>
-	      </table>
 		  <br>
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
@@ -133,8 +127,8 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table cellpadding="0" cellspacing="0" border="0" >
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
-	              %%=v(@link)=%%
+	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">
+	              %%=v(@BreakingLink)=%%
 	            </a>
 	          </td>
 	        </tr>
@@ -145,7 +139,7 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table class="button" cellpadding="0" cellspacing="0" border="0">
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">
 	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/read-more-blue.png" width="150" style="width:150px;">
 	            </a>
 	          </td>

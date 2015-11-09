@@ -1,30 +1,30 @@
-%%[Var @headline, @link, @description, @linkTracking
-
-
-Set @headline = "Yellen: Banks much healthier but problems remain"
-Set @link = "http://www.cnbc.com/2015/11/04/janet-yellen-banks-much-healthier-but-problems-remain.html"
 
 
 
 
+%%[Var @headline, @link
+
+    set @BreakingHeadline = [headline]
+    set @BreakingExcerpt = [excerpt]
+    set @BreakingLink =  [url]
+    set @BreakingLinkTracking = Concat(@BreakingLink,"?__source=newsletter|breakingnews")
+    set @BreakingImage = [image]
+    set @BreakingDate = [pubdate]
+	
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€"','&#8212;')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€”','&#8212;')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,'â€œ','"')
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,"â€™","'")
+	SET @BreakingHeadline = REPLACE(@BreakingHeadline,"â€¦","...")
+
+
+
+set @subjectline = @BreakingHeadline
 
 
 
 
-
-
-
-SET @headline = REPLACE(@headline,'â€"','&#8212;')
-SET @headline = REPLACE(@headline,'â€”','&#8212;')
-SET @headline = REPLACE(@headline,'â€œ','"')
-SET @headline = REPLACE(@headline,"â€™","'")
-SET @headline = REPLACE(@headline,"â€¦","...")
-set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
-
-
-
-]%%
-<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
+]%%<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>	 
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -107,12 +107,11 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@link)=%%">%%=v(@headline)=%%</a>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">%%=v(@BreakingHeadline)=%%</a>
 	          </td>
 	        </tr>
 	      </table>
 		  
-  	      
 		  <br>
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
@@ -126,8 +125,8 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table cellpadding="0" cellspacing="0" border="0" >
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
-	              %%=v(@link)=%%
+	            <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">
+	              %%=v(@BreakingLink)=%%
 	            </a>
 	          </td>
 	        </tr>
@@ -138,7 +137,7 @@ set @linkTracking = Concat(@link,"?__source=newsletter|breakingnews")
 	      <table class="button" cellpadding="0" cellspacing="0" border="0">
 	        <tr>
 	          <td>
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@BreakingLinkTracking)=%%">
 	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/read-more-blue.png" width="150" style="width:150px;">
 	            </a>
 	          </td>
