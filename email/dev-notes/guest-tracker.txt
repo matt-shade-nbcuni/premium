@@ -1,0 +1,2 @@
+http://guest-api.cnbc.com/guest-tracker-service/getWatchListAlerts?dStart=07/01/2015&dEnd=07/16/2015
+http://geni.cnbc.com/EconCenter/GTData.asmx/getWatchListAlerts?dStart=07/01/2015&dEnd=07/16/2015

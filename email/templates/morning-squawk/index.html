@@ -157,7 +157,7 @@
 	Set @newsbody = REPLACE(@newsbody,'href="/','href="http://www.cnbc.com/')
 	Set @newsbody = REPLACE(@newsbody,'href="/','href="http://www.cnbc.com/')
 	Set @newsbody = REPLACE(@newsbody,"<p","<div style='font-family:Helvetica, Arial, sans-serif;color:#424858;font-size:16px;line-height:22px;padding-left:10px;padding-right:10px;padding-top:5px;padding-bottom:5px;'")
-	Set @newsbody = REPLACE(@newsbody,"</p>","</div>")
+	Set @newsbody = REPLACE(@newsbody,"</p>","</div><hr style='color:lightgrey;color: #efefef;background-color: #efefef;height: 1px; border:0; margin-top:10px;margin-bottom:10px;'>")
 	Set @newsbody = REPLACE(@newsbody,"<h4","<table cellspacing='0' cellpadding='10' border='0' width='100%' align='center'><tr><td style='background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase;font-size:16px;border-radius:3px;'")
 	Set @newsbody = REPLACE(@newsbody,"</h4>","</td></tr></table><br>")
 
