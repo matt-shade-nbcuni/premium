@@ -1,0 +1,270 @@
+Morning Squawk:
+
+rss feed is dynamic
+• go to http://www.cnbc.com/id/102691045/device/rss
+
+• get the id of the first item and access like this:
+	http://www.cnbc.com/id/103209998/data.xml
+
+• parse the promo_content node, then do some formatting with replace methods, and look for special characters and replace them...then add this content above the ad
+
+• parse the html_content node, then do some formatting with replace methods, and look for special characters and replace them...then add this content below the ad
+
+Everything else in this template is baked in.
+
+working code:
+http://pages.response.cnbc.com/morning-squawk-dynamic/
+
+
+ID:837
+PageID:821
+Delivery: Mon - Fri 7am ish
+
+Editor: Belvedere, Matthew (NBCUniversal) <Matthew.Belvedere@nbcuni.com>
+
+
+==================================================================================
+
+
+
+Evening Brief:
+
+for top news section:
+• go to http://www.cnbc.com/id/102900041/data.xml
+• parse each //Relations/related/asset and get it's id attribute
+• prefix each id with http://www.cnbc.com/id/ and suffix each id with /data.xml
+• go to http://www.cnbc.com/id/ + {asset id} + /data.xml(use this for the link)
+• parse //promotional_view/headline/link_headline then do some formatting with replace methods, and look for special characters and replace them(use this for the headline text)
+
+• loop through the first 3 assets and put them above the ad
+• loop through the remaining assets and put below the ad
+
+
+
+for cnbc pro section:
+• go to http://www.cnbc.com/id/102900050/data.xml
+• parse each //Relations/related/asset and get it's id attribute
+• prefix each id with http://www.cnbc.com/id/ and suffix each id with /data.xml
+• go to http://www.cnbc.com/id/ + {asset id} + /data.xml(use this for the link)
+• parse //promotional_view/headline/link_headline then do some formatting with replace methods, and look for special characters and replace them(use this for the headline text)
+
+
+
+for top video:
+• go to http://search.cnbc.com/rs/search/combinedcms/view.rss?partnerId=20063&ids=102900052
+• for each item: 
+	• parse //item/title
+	• parse //item/description
+	• parse //item/link
+	• parse //item/metadatathumbnail
+	• for title and description do some formatting with replace methods, and look for special characters and replace them
+	• for video thumbnail change the size to 320 x 180 by changing the end of the //item/metadatathumbnail value
+		example:
+		SET @videothumbslink = REPLACE(@videothumb,".240x160.jpg",".320x180.jpg")
+		SET @videothumbslink = REPLACE(@videothumbslink,".600x400.jpg",".320x180.jpg")
+		SET @videothumbslink = REPLACE(@videothumbslink,"/applications","http://fm.cnbc.com/applications")
+		
+		
+		
+for special report section:
+• go to http://www.cnbc.com/id/102900054/data.xml
+• parse each //Relations/related/asset and get it's id attribute
+• prefix each id with http://www.cnbc.com/id/ and suffix each id with /data.xml
+• go to http://www.cnbc.com/id/ + {asset id} + /data.xml(use this for the link)
+• parse //promotional_view/headline/link_headline then do some formatting with replace methods, and look for special characters and replace them(use this for the headline text)
+
+Editor: Cordova, Elisabeth (NBCUniversal) <Elisabeth.Cordova@nbcuni.com>; Park, JeeYeon (NBCUniversal) <JeeYeon.Park@nbcuni.com>
+
+==================================================================================
+
+
+
+Your Wealth:
+editor's note content:
+http://www.cnbc.com/id/102963696/data.xml
+we parse the promo_content node then do some formatting with replace methods, and look for special characters and replace them
+
+Top News section:
+• go here: http://www.cnbc.com/id/102963691/data.xml
+• parse	//Relations/related/asset
+	we use //meta/title valur for the title of this section
+
+For the stories we use the same xml:
+	http://www.cnbc.com/id/102963691/data.xml
+• parse each //Relations/related/asset
+• go to: http://www.cnbc.com/id/ + {STORY ID HERE} + /data.xml 
+• parse	//promotional_view/headline/link_headline and //promotional_view/description/seo_description then do some formatting with replace methods, and look for special characters and replace them
+
+working code:
+http://pages.response.cnbc.com/your-wealth/	
+
+ID:	887
+PageID:881
+Delivery: Wednesdays 10 - 10:30am
+
+Editor: Pavia, James (NBCUniversal) <James.Pavia@nbcuni.com>; Kiesnoski, Kenneth (NBCUniversal) <Kenneth.Kiesnoski@nbcuni.com>
+
+==================================================================================
+
+
+
+Big Data Investor:
+content above ad:
+• go to: http://www.cnbc.com/id/102945686/data.xml
+• parse the html_body node, then do some formatting with replace methods, and look for special characters and replace them...then add this content above the ad
+
+content below ad:
+• go to: http://www.cnbc.com/id/102949597/data.xml
+• parse the html_body node, then do some formatting with replace methods, and look for special characters and replace them...then add this content above the ad
+
+for pro section:
+http://www.cnbc.com/id/102949675/data.xml
+• parse each //Relations/primary/asset get it's id attribute
+• prefix each id with http://www.cnbc.com/id/ and suffix each id with /data.xml
+• go to each new url built per asset and get //promotional_view/headline/link_headline for the headline text
+• prefix each id with http://www.cnbc.com/id/ and use for the corresponding link
+
+working code:
+http://pages.response.cnbc.com/big-data-investor/
+
+ID:	871
+PageID:868
+Delivery: Tuesdays 10:30am
+
+Editor: Rosenbaum, Eric (NBCUniversal) <Eric.Rosenbaum@nbcuni.com>
+
+==================================================================================
+
+
+
+Options Action:
+• go to this id to get the id where the content lives:
+http://www.cnbc.com/id/102932205/device/rss
+• look at first item and get the value of <metadata:id>
+• prefix <metadata:id> with http://www.cnbc.com/id/
+• suffix <metadata:id> with /data.xml
+
+• go to http://www.cnbc.com/id/ + <metadata:id> + /data.xml
+
+for "tonight's trades" content(unordered list):
+• parse //content/html_keypoints
+• then do some formatting with replace methods, and look for special characters and replace them
+
+for top stories content:
+• at the same url(http://www.cnbc.com/id/102932205/data.xml)
+• parse each //Relations/related/asset and get it's id attribute
+• prefix each id with http://www.cnbc.com/id/ and suffix each id with /data.xml
+• go to each new url built per asset and get //promotional_view/headline/link_headline for the headline text
+• prefix each id with http://www.cnbc.com/id/ and use for the corresponding link
+• for the first link of this section we also get //promotional_view/description/seo_description for the description value, //attribution/author/asset/name for the author name, the id attribute of //attribution/author/asset to build the link to the author page, and //promotional_view/image/asset/filepath for the value of the img src
+
+twitter section is baked into the template
+
+for key events:
+(follow same steps as tonight's trades)
+
+(begin same steps)
+• go to this id to get the id where the content lives:
+http://www.cnbc.com/id/102932205/device/rss
+• look at first item and get the value of <metadata:id>
+• prefix <metadata:id> with http://www.cnbc.com/id/
+• suffix <metadata:id> with /data.xml
+• go to http://www.cnbc.com/id/ + <metadata:id> + /data.xml
+(end same steps)
+
+• parse //content/html_body
+• then do some formatting with replace methods, and look for special characters and replace them
+
+working code:
+http://pages.response.cnbc.com/options-action-dynamic/
+
+ID:	860
+PageID:840
+Delivery: Fridays 5:00pm
+
+Editor: Yang, Stephanie (NBCUniversal) <stephanie.yang@nbcuni.com>; Diaz, Amanda (NBCUniversal) <Amanda.Diaz@nbcuni.com>
+
+==================================================================================
+
+
+
+Your Money Your Vote:
+• go to http://www.cnbc.com/id/103092882/device/rss
+• for each item parse //channel/item/title, //channel/item/description, and //channel/item/link.... these are the headline, description, and link
+• for title and description per item we do some formatting with replace methods, and look for special characters and replace them
+
+working code:
+http://pages.response.cnbc.com/election-nl/
+
+ID:	1026
+PageID:1011
+Delivery: Fridays 7:30am
+
+Editor: Lowry, Thomas (NBCUniversal) <Thomas.Lowry@nbcuni.com>
+
+==================================================================================
+
+
+
+
+General Opt In Day
+
+Currently being generated manually using template and content areas in ET:
+My Templates > General Opt in DAY
+
+
+Delivery: random
+
+
+Editor: Nichols, Andrew (NBCUniversal) <andrew.nichols@nbcuni.com>
+
+==================================================================================
+
+
+
+
+General Opt In Prime
+
+Currently being generated manually using template and content areas in ET:
+My Templates > General Opt ins
+
+
+Delivery: random
+
+
+Editor: Nichols, Andrew (NBCUniversal) <andrew.nichols@nbcuni.com>
+
+==================================================================================
+
+
+
+
+Guest Alerts - Currently no being sent
+
+
+
+==================================================================================
+
+
+
+Pro Alerts
+
+Editors manually type in values into variables set at the top of each alert
+ID:	392
+ID:	393
+
+Editor: Melloy, John (NBCUniversal) <John.Melloy@nbcuni.com>; Moreano, Giovanny (NBCUniversal) <Giovanny.Moreano@nbcuni.com>
+
+==================================================================================
+
+
+
+Currently being generated manually using template and content areas in ET:
+My Templates > CNBC Pro Newsletter
+
+Delivery: Fridays 12pm
+Editor: O'Dell, Joseph (NBCUniversal) <Joseph.O'Dell@nbcuni.com>
+
+
+
+==================================================================================
