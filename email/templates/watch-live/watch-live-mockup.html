@@ -1,47 +1,11 @@
-%%[Var 
-
-    set @title = [headline]
-    set @desc = [excerpt]
-    set @linkTracking = [url]
-    set @image = [image]
-    set @date = [pubdate]
-	
-	SET @title = REPLACE(@title,'â€"','&#8212;')
-	SET @title = REPLACE(@title,'â€”','&#8212;')
-	SET @title = REPLACE(@title,'â€œ','"')
-	SET @title = REPLACE(@title,"â€™","'")
-	SET @title = REPLACE(@title,"â€¦","...")
+%%[Var @xml, @titles, @title, @descs, @desc, @links, @link, @cnt
 
 
+Set @title = "WATCH:  Comcast Moves Closer to Offering Cell Service, Activates Deal With Verizon"
 
-set @subjectline = @title
+Set @link = "http://cnbc.com/live-tv" 
 
-set @p = "/(video\.cnbc\.com)/"
-set @pd = "/(data\.cnbc\.com)/"
-set @linkObjectp = "www.cnbc.com"
-set @m = RegExMatch(@linkTracking, @p, 0 , "IgnoreCase")
-set @mm = RegExMatch(@linkTracking, @linkObjectp, 0 , "IgnoreCase")
-set @mmm = RegExMatch(@linkTracking, @pd, 0 , "IgnoreCase")
-set @videoLink = "&__source=newsletter|watchlive"
-set @noVideoLink ="?__source=newsletter|watchlive"
-
-IF @m == "/video.cnbc.com/" THEN
-		set @linkTracking = concat(@linkTracking,@videoLink)	
-	
-	 ELSEIF @mm == "www.cnbc.com" THEN
-		set @linkTracking = concat(@linkTracking,@noVideoLink)
-	
-	ELSEIF @mmm == "/data.cnbc.com/" THEN
-		set @linkTracking = concat(@linkTracking,@noVideoLink)	
-	
-	 ELSE 
-	set @linkTracking = concat(@linkTracking)
-set @m ="no match"	
-ENDIF
-
-
-
-
+set @linkTracking = Concat(@link,"?__source=newsletter|watchlivealert")
 ]%%
 
 <!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
@@ -125,31 +89,31 @@ ENDIF
 	    <td valign="top" style="font-family: Helvetica, Arial, sans-serif; color:#424858;">
     	      <table cellpadding="0" cellspacing="0" border="0" >
     	        <tr>
-    	          <td>
-			<div style="margin-bottom:10px;">We're sorry it's been awhile since we've sent you a Guest Alert email. We've made changes and are back with a new name &mdash; Watch Live alerts. We'll let you know when there is a key guest appearing on CNBC and when to tune in.</div>
-<div>If you'd prefer not to receive Watch Live alerts, you can unsubscribe at the bottom of this email.</div>
+    	          <td style="line-height:1.4em;">
+			<div style="margin-bottom:10px;">We're sorry it's been awhile since we've sent you a Guest Alert email. We've made changes and are back with a new name - Watch Live alerts. Just like the Guest Alerts you originally signed up for, Watch Live alerts will let you know when there is an important guest appearing on CNBC and when to tune-in for a "you don't want to miss this" moment.</div>
+			<div>If you'd prefer not to receive Watch Live alerts, you can unsubscribe at the bottom of this email. We'll miss you though and you'll miss out on the alert that something big is happening on CNBC.</div>
   	          </td>
   	        </tr>
   	      </table>
+		  <br>
 			
-			<br>
 			
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <div class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;font-size:32px;line-height:40px;">%%=v(@title)=%%</div>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@linkTracking)=%%">%%=v(@title)=%%</a>
 	          </td>
 	        </tr>
 	      </table>
 		  
-  	      <table cellpadding="0" cellspacing="0" border="0" >
+  	      <!-- <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
 				  <br>
 	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">%%=v(@desc)=%%</div>
 	          </td>
 	        </tr>
-	      </table>
+	      </table> -->
 		  
   	      <!-- <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
@@ -176,20 +140,15 @@ ENDIF
 	      <table class="button" cellpadding="0" cellspacing="0" border="0" width="100%">
 	        <tr>
 	          <td class="drop" align="center">
-				  %%[IF Empty(@linkTracking) THEN]%%
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="http://www.cnbc.com/live-tv/?__source=newsletter|watchlivealert">
-					%%[ELSE]%%
-					<a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
-					
-					%%[ENDIF]%%
-	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/wl-watch-live-btn.png" alt="Watch Live TV" width="150" style="width:150px;">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/watch-live-btn.png" width="150" style="width:150px;">
 	            </a>
 				<br>
 				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your TV provider</div>
 	          </td>
 	          <td class="drop" align="center">
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="https://www.cnbc.com/application/pro/?__source=newsletter|watchlive">
-	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/wl-cnbc-pro-btn.png" alt="Watch CNBC Pro Live" width="150" style="width:150px;">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-pro-btn.png" width="150" style="width:150px;">
 	            </a>
 				<br>
 				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your PRO subscription</div>
@@ -202,15 +161,15 @@ ENDIF
  		 
  		 <br>
 		 <br>
-	      <!-- <table cellpadding="0" cellspacing="0" border="0" width="100%">
+	      <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	        <tr>
-	          <td>
-				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+	          <td>				  
+				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />		  
 				  <div style="margin-bottom:25px; font-size:14px; font-family: Helvetica, Arial, sans-serif;">Follow <a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;" href="https://twitter.com/CNBCnow">@CNBCnow</a> for breaking news and real-time market updates</div>
-				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />		  
 	          </td>
 	        </tr>
-	      </table> -->
+	      </table>
 		  
           </td>
         </tr>
@@ -218,10 +177,7 @@ ENDIF
 	<br>	
 <!--END BREAKING CONTENT -->
 
-%%[ 
-NEXT @cnt 
-ENDIF
-]%%
+
 
 <div style="clear:both;"></div>
 
@@ -275,13 +231,13 @@ ENDIF
 		
 </tr></table>
 <br>
-<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>&nbsp;  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>&nbsp;  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a>&nbsp;<a class="footer-link" href="http://www.cnbc.com/digital-products/?__source=newsletter|watchlive" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;text-decoration:none;" class="footer-address" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue<br>Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>&nbsp;  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>&nbsp;  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a>&nbsp;<a class="footer-link" href="http://www.cnbc.com/digital-products/" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;text-decoration:none;" class="footer-address" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue<br>Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
 
 </td></tr></table>
 
 
 
-<br><div style="color:#333333;font-size:14px;font-family: Helvetica, Arial, sans-serif; text-align:center;">To ensure delivery to your inbox,<br> please add <a href="mailto:guestalerts@response.cnbc.com">guestalerts@response.cnbc.com</a><br> to your address book.</div>
+<br><div style="color:#333333;font-size:14px;font-family: Helvetica, Arial, sans-serif; text-align:center;">To ensure delivery to your inbox,<br> please add <a href="mailto:breakingnews@response.cnbc.com">breakingnews@response.cnbc.com</a><br> to your address book.</div>
 <!--END FOOTER -->
 
 	

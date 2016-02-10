@@ -1,0 +1,655 @@
+<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>	 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta content="width=device-width" name="viewport"/>
+	<title>CNBC | Evening Brief</title>
+	<style>
+	
+	table[class="wrapper"]{
+		width:600px;
+	}
+	@media only screen and (max-width: 599px) {
+		table[class="wrapper"]{
+			width:100%!important;
+		}
+	}
+@media only screen and (max-width: 400px) {
+	    td[class="drop"] {
+	        display: block!important;
+            width: 100%!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			
+	    }
+		td[class="drop"] img {
+			width:100%!important;
+			display: block!important;
+			height:auto!important;
+		}
+		
+		table[class="contents"]{padding-left:0px!important;}
+		
+		a[class="footer-link"]{width:100%!important;
+			display: block!important;
+			margin-bottom:4px;
+			margin-top:4px;
+		}
+			img[class="header-logo"]{
+				width:250px!important;;
+			}
+			
+			table { 
+			    border-spacing: 0;
+			    border-collapse: collapse;
+			}
+		
+	}
+	
+	</style>
+	
+</head>
+<body style="background:#efefef;">
+	<custom name="opencounter" type="tracking">
+	
+		
+<!--MAIN WRAPPER -->
+	<table class="wrapper" width="600" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;" align="center">
+		<tr>
+			<td>
+<!--END MAIN WRAPPER -->
+			
+		<!--MAIN HEADER -->
+			<table width="100%"  cellspacing="0" cellpadding="10" border="0" align="center">
+				<tr>
+					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#0d3d61;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
+			<img style="color:#ffffff;width:250px;" alt="CNBC | Evening Brief"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/evening-brief.png" border="0" width="250"/>
+					</td>
+				</tr>
+			</table>
+		
+		<!--END MAIN HEADER -->	
+
+<!--MARKETS IMAGE -->
+	<table cellspacing="10" cellpadding="0" border="0" style="margin-bottom:20px;" align="center">
+		<tr>
+			<td>
+				<div style="clear:both;height:20px;"></div>
+				<a href="http://www.cnbc.com/markets/?__source=newsletter|eveningbrief">
+					<img src="http://api.cnbc.com/newsletterasp/afterhours.asp" width="100%" border="0"/>
+					<br>
+				</a>
+			</td>
+		</tr>
+	</table>
+	<br>	
+<!--END MARKETS IMAGE -->
+
+<!--NEWS -->
+
+%%[var @linkObject, @o, @p, @m, @result, @videoLink, @noVideoLink, @concatLink, @linkObjectp, @pd, @mmm]%%
+
+
+	
+%%[Var @newsHeaderxml, @newsHeadertitles, @newsHeadercnt, @newsHeaderrows, @newsHeadercnt
+set @newsHeaderxml = httpget('http://www.cnbc.com/id/102900041/data.xml')
+Set @newsHeadertitles = BuildRowsetFromXML(@newsHeaderxml,"//Relations/primary/asset",1)
+SET @newsHeaderrows = RowCount(@newsHeadertitles)
+IF @newsHeaderrows >= 1 THEN
+for @newsHeadercnt = 1 to 1 do
+]%%
+
+<table cellspacing="10" cellpadding="10" border="0" width="100%">
+	<tr>
+		<td style="background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;border-radius:3px;">
+			TOP NEWS
+		</td>
+	</tr>
+</table>
+<br>
+%%[ 
+NEXT @newsHeadercnt 
+ENDIF
+]%%
+
+
+%%[Var @newsxml, @newstitles, @newstitle, @newstitleid, @newsurlprefix, @newsurlsuffix, @newsurl, @newsurlxml, @newspromoheadline, @newspromoheadlinetitle, @newsdescs, @newsdesc, @newslinks, @newslink, @newsthumbs, @newsthumb, @newsthumbslink, @newscnt, @newsrows
+
+set @newsxml = httpget('http://www.cnbc.com/id/102900041/data.xml')
+
+Set @newstitles = BuildRowsetFromXML(@newsxml,"//Relations/primary/asset",1)
+
+
+SET @newsrows = RowCount(@newstitles)
+
+IF @newsrows >= @newsrows THEN
+for @newscnt = 1 to 3 do
+Set @newstitleid = Field(Row(@newstitles,@newscnt),"id_att")
+
+Set @newsurlprefix = 'http://www.cnbc.com/id/'
+Set @newsurlsuffix = '/data.xml'
+
+
+Set @newsurl = Concat(@newsurlprefix,@newstitleid,@newsurlsuffix)
+Set @newslink = Concat(@newsurlprefix,@newstitleid)
+Set @newsurlxml = httpget(@newsurl)
+set @newspromoheadline = BuildRowsetFromXML(@newsurlxml,"//promotional_view/headline/link_headline",1)
+set @newspromoheadlinetitle =  Field(Row(@newspromoheadline,1),"Value")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€"','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€”','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€œ','"')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€™","'")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€¦","...")
+Set @newstitle = Field(Row(@newstitles,@newscnt),"id_att")
+
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@newslink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@newslink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@newslink, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|eveningbrief"
+set @noVideoLink ="?__source=newsletter|eveningbrief"
+IF @m == "/video.cnbc.com/" THEN
+		set @newslink = concat(@newslink,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @newslink = concat(@newslink,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @newslink = concat(@newslink,@noVideoLink)	
+	
+	 ELSE 
+	set @newslink = concat(@newslink)
+set @m ="no match"	
+ENDIF
+
+
+]%%
+
+
+
+
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@newslink)=%%" title="%%%=v(@newspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@newspromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @newscnt 
+ENDIF
+]%%
+
+<!--ADVERT -->
+
+<!-- <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#efefef;margin-bottom:40px;" width="95%">
+	<tr>
+		<td align="center">
+			<img height="15" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/MORNING-SQUAWK/adHead.png"/>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<a href="http://ad.doubleclick.net/N2620/jump/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" target="_blank">
+				<img width="300" height="250" style="padding-bottom:40px;" src="http://ad.doubleclick.net/N2620/ad/nbcu.cnbc.newsletter/evningbrf;site=cnbc;sect=evningbrf;!c=evningbrf;pos=1;tile=1;sz=300x250;ord=123456a" border="0">
+			</a>
+		</td>
+	</tr>
+</table> -->
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="border-collapse:collapse;background:#ffffff;padding-bottom:25px;margin-top:30px;"><tr><td colspan="2"><a style="display: block; width: 300px; height: 250px;" href="http://li.cnbc.com/click?s=121689&sz=300x250&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=121689&sz=300x250&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" border="0" width="300" height="250"/></a></td></tr><tr style="display:block; height:1px; line-height:1px;"><td><img src="http://li.cnbc.com/imp?s=160049&sz=1x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" height="1" width="10" /></td><td><img src="http://li.cnbc.com/imp?s=160050&sz=1x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" height="1" width="10" /></td></tr><tr><td align="left"><a href="http://li.cnbc.com/click?s=121685&sz=116x15&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=121685&sz=116x15&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" border="0"/></a></td><td align="right"><a href="http://li.cnbc.com/click?s=121686&sz=69x15&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" rel="nofollow"><img src="http://li.cnbc.com/imp?s=121686&sz=69x15&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" border="0"/></a></td></tr></table>
+<br>
+<!--END ADVERT -->
+
+%%[
+
+IF @newsrows >= @newsrows THEN
+for @newscnt = 4 to @newsrows do
+Set @newstitleid = Field(Row(@newstitles,@newscnt),"id_att")
+
+Set @newsurlprefix = 'http://www.cnbc.com/id/'
+Set @newsurlsuffix = '/data.xml'
+
+
+Set @newsurl = Concat(@newsurlprefix,@newstitleid,@newsurlsuffix)
+Set @newslink = Concat(@newsurlprefix,@newstitleid)
+Set @newsurlxml = httpget(@newsurl)
+set @newspromoheadline = BuildRowsetFromXML(@newsurlxml,"//promotional_view/headline/link_headline",1)
+set @newspromoheadlinetitle =  Field(Row(@newspromoheadline,1),"Value")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€"','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€”','&#8212;')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,'â€œ','"')
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€™","'")
+SET @newspromoheadlinetitle = REPLACE(@newspromoheadlinetitle,"â€¦","...")
+
+Set @newstitle = Field(Row(@newstitles,@newscnt),"id_att")
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@newslink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@newslink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@newslink, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|eveningbrief"
+set @noVideoLink ="?__source=newsletter|eveningbrief"
+IF @m == "/video.cnbc.com/" THEN
+		set @newslink = concat(@newslink,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @newslink = concat(@newslink,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @newslink = concat(@newslink,@noVideoLink)	
+	
+	 ELSE 
+	set @newslink = concat(@newslink)
+set @m ="no match"	
+ENDIF
+
+
+]%%
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@newslink)=%%" title="%%%=v(@newspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@newspromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @newscnt 
+ENDIF
+]%%
+
+<!--END NEWS -->
+
+
+
+<!--PRO -->
+%%[Var @proHeaderxml, @proHeadertitles, @proHeadercnt, @proHeaderrows, @proHeadercnt
+set @proHeaderxml = httpget('http://www.cnbc.com/id/102900050/data.xml')
+Set @proHeadertitles = BuildRowsetFromXML(@proHeaderxml,"//Relations/primary/asset",1)
+SET @proHeaderrows = RowCount(@proHeadertitles)
+IF @proHeaderrows >= 1 THEN
+for @proHeadercnt = 1 to 1 do
+]%%
+
+<table cellspacing="10" cellpadding="10" border="0"  width="100%">
+	<tr>
+		<td style="background:#146195;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase;vertical-align:middle;border-radius:3px;" ><img style="vertical-align:middle;width:148px;margin-left:3px;" src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/PRO/EMAIL/img/pro-head-badge.png" alt="CNBC Pro" width="148"></td>
+	</tr>
+</table>
+<br>
+%%[ 
+NEXT @proHeadercnt 
+ENDIF
+]%%
+
+
+%%[Var @proxml, @protitles, @protitle, @protitleid, @prourlprefix, @prourlsuffix, @prourl, @prourlxml, @propromoheadline, @propromoheadlinetitle, @prodescs, @prodesc, @prolinks, @prolink, @prothumbs, @prothumb, @prothumbslink, @procnt, @prorows
+
+set @proxml = httpget('http://www.cnbc.com/id/102900050/data.xml')
+
+Set @protitles = BuildRowsetFromXML(@proxml,"//Relations/primary/asset",1)
+
+
+SET @prorows = RowCount(@protitles)
+
+IF @prorows >= @prorows THEN
+for @procnt = 1 to @prorows do
+Set @protitleid = Field(Row(@protitles,@procnt),"id_att")
+
+Set @prourlprefix = 'http://www.cnbc.com/id/'
+Set @prourlsuffix = '/data.xml'
+
+
+Set @prourl = Concat(@prourlprefix,@protitleid,@prourlsuffix)
+Set @prolink = Concat(@prourlprefix,@protitleid)
+Set @prourlxml = httpget(@prourl)
+set @propromoheadline = BuildRowsetFromXML(@prourlxml,"//promotional_view/headline/link_headline",1)
+set @propromoheadlinetitle =  Field(Row(@propromoheadline,1),"Value")
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€"','&#8212;')
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€”','&#8212;')
+
+
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,"â€¦","...")
+
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,'â€œ','"')
+SET @propromoheadlinetitle = REPLACE(@propromoheadlinetitle,"â€™","'")
+Set @protitle = Field(Row(@protitles,@procnt),"id_att")
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@prolink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@prolink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@prolink, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|eveningbrief"
+set @noVideoLink ="?__source=newsletter|eveningbrief"
+IF @m == "/video.cnbc.com/" THEN
+		set @prolink = concat(@prolink,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @prolink = concat(@prolink,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @prolink = concat(@prolink,@noVideoLink)	
+	
+	 ELSE 
+	set @prolink = concat(@prolink)
+set @m ="no match"	
+ENDIF
+
+
+]%%
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@prolink)=%%" title="%%%=v(@propromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@propromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @procnt 
+ENDIF
+]%%
+
+
+<!--END PRO -->
+
+
+<!--VIDEO -->
+
+%%[Var @videoHeaderxml, @videoHeadertitles, @videoHeadercnt, @videoHeaderrows, @videoHeadercnt
+set @videoHeaderxml = httpget('http://search.cnbc.com/rs/search/combinedcms/view.rss?partnerId=20063&ids=102900052')
+Set @videoHeadertitles = BuildRowsetFromXML(@videoHeaderxml,"//item/title",1)
+SET @videoHeaderrows = RowCount(@videoHeadertitles)
+IF @videoHeaderrows >= 1 THEN
+for @videoHeadercnt = 1 to 1 do
+]%%
+
+<table cellspacing="10" cellpadding="10" border="0"  width="100%">
+	<tr>
+		<td  style="background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;border-radius:3px;" >
+			TOP VIDEO
+		</td>
+	</tr>
+</table>
+<br>
+%%[ 
+NEXT @videoHeadercnt 
+ENDIF
+]%%
+
+
+
+%%[Var @videoxml, @videotitles, @videotitle, @videodescs, @videodesc, @videolinks, @videolink, @videothumbs, @videothumb, @videothumbslink, @videocnt
+
+set @videoxml = httpget('http://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=20063&ids=102900052')
+
+SET @videoxml = REPLACE(@videoxml,"metadata:image","metadataimage")
+SET @videoxml = REPLACE(@videoxml,"metadata:url","metadataurl")
+
+
+Set @videotitles = BuildRowsetFromXML(@videoxml,"//item/title",1)
+
+Set @videodescs = BuildRowsetFromXML(@videoxml,"//item/description",1)
+Set @videolinks = BuildRowsetFromXML(@videoxml,"//item/link",1)
+Set @videothumbs = BuildRowsetFromXML(@videoxml,"//item/metadataimage/metadataurl",1)
+
+SET @videorows = RowCount(@videotitles)
+
+IF @videorows >= @videorows THEN
+for @videocnt = 1 to @videorows do
+Set @videotitle = Field(Row(@videotitles,@videocnt),"Value")
+SET @videotitle = REPLACE(@videotitle,'â€"','&#8212;')
+SET @videotitle = REPLACE(@videotitle,'â€”','&#8212;')
+
+SET @videotitle = REPLACE(@videotitle,'â€œ','"')
+SET @videotitle = REPLACE(@videotitle,"â€™","'")
+SET @videotitle = REPLACE(@videotitle,"â€¦","...")
+
+
+Set @videodesc = Field(Row(@videodescs,@videocnt), "Value")
+SET @videodesc = REPLACE(@videodesc,'â€"','&#8212;')
+SET @videodesc = REPLACE(@videodesc,'â€”','&#8212;')
+
+SET @videodesc = REPLACE(@videodesc,'â€œ','"')
+SET @videodesc = REPLACE(@videodesc,"â€™","'")
+SET @videodesc = REPLACE(@videodesc,"â€¦","...")
+
+
+Set @vidlink = Field(Row(@videolinks,@videocnt), "Value") 
+Set @videothumb = Field(Row(@videothumbs,@videocnt), "Value")
+SET @videothumbslink = REPLACE(@videothumb,".240x160.jpg",".320x180.jpg")
+SET @videothumbslink = REPLACE(@videothumbslink,".600x400.jpg",".320x180.jpg")
+SET @videothumbslink = REPLACE(@videothumbslink,"/applications","http://fm.cnbc.com/applications")
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@vidlink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@vidlink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@vidlink, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|eveningbrief"
+set @noVideoLink ="?__source=newsletter|eveningbrief"
+IF @m == "/video.cnbc.com/" THEN
+		set @vidlink = concat(@vidlink,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @vidlink = concat(@vidlink,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @vidlink = concat(@vidlink,@noVideoLink)	
+	
+	 ELSE 
+	set @vidlink = concat(@vidlink)
+set @m ="no match"	
+ENDIF
+
+
+]%%
+
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>
+		<td class="drop" valign="top" style="width:160px;">
+			<img width="160" style="width:160px;height:120px;margin-bottom:5px;margin-right:10px;" src="%%=v(@videothumbslink)=%%">
+		</td>
+		<td class="drop" valign="middle">			
+				<a href="%%=RedirectTo(@vidlink)=%%" title="%%=v(@videotitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@videotitle)=%%</a>			
+			<div style="font-size:14px; line-height:18px; font-family:Helvetica, Arial, sans-serif; color: #424858;">%%=v(@videodesc)=%%</div>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+
+%%[ 
+NEXT @videocnt 
+ENDIF
+]%%
+
+
+<!--END VIDEO -->
+
+<!--SPECIAL REPORTS -->
+%%[Var @specialreportsHeaderxml, @specialreportsHeadertitles, @specialreportsHeadercnt, @specialreportsHeaderrows, @specialreportsHeadercnt
+set @specialreportsHeaderxml = httpget('http://www.cnbc.com/id/102900054/data.xml')
+Set @specialreportsHeadertitles = BuildRowsetFromXML(@specialreportsHeaderxml,"//Relations/primary/asset",1)
+SET @specialreportsHeaderrows = RowCount(@specialreportsHeadertitles)
+IF @specialreportsHeaderrows >= 1 THEN
+for @specialreportsHeadercnt = 1 to 1 do
+]%%
+
+<table cellspacing="10" cellpadding="10" border="0"  width="100%">
+	<tr>
+		<td  style="background:#146194;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;border-radius:3px;" >
+			SPECIAL REPORTS
+		</td>
+	</tr>
+</table>
+<br>
+%%[ 
+NEXT @specialreportsHeadercnt 
+ENDIF
+]%%
+
+
+%%[Var @specialreportsxml, @specialreportstitles, @specialreportstitle, @specialreportstitleid, @specialreportsurlprefix, @specialreportsurlsuffix, @specialreportsurl, @specialreportsurlxml, @specialreportspromoheadline, @specialreportsspromoheadlinetitle, @specialreportsdescs, @specialreportsdesc, @specialreportslinks, @specialreportslink, @specialreportsthumbs, @specialreportsthumb, @specialreportsthumbslink, @specialreportscnt, @specialreportsrows
+
+set @specialreportsxml = httpget('http://www.cnbc.com/id/102900054/data.xml')
+
+Set @specialreportstitles = BuildRowsetFromXML(@specialreportsxml,"//Relations/primary/asset",1)
+
+
+SET @specialreportsrows = RowCount(@specialreportstitles)
+
+IF @specialreportsrows >= @specialreportsrows THEN
+for @specialreportscnt = 1 to @specialreportsrows do
+Set @specialreportstitleid = Field(Row(@specialreportstitles,@specialreportscnt),"id_att")
+
+Set @specialreportsurlprefix = 'http://www.cnbc.com/id/'
+Set @specialreportsurlsuffix = '/data.xml'
+
+
+Set @specialreportsurl = Concat(@specialreportsurlprefix,@specialreportstitleid,@specialreportsurlsuffix)
+Set @specialreportslink = Concat(@specialreportsurlprefix,@specialreportstitleid)
+Set @specialreportsurlxml = httpget(@specialreportsurl)
+set @specialreportspromoheadline = BuildRowsetFromXML(@specialreportsurlxml,"//promotional_view/headline/link_headline",1)
+set @specialreportspromoheadlinetitle =  Field(Row(@specialreportspromoheadline,1),"Value")
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€"','&#8212;')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€”','&#8212;')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,'â€œ','"')
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,"â€™","'")
+SET @specialreportspromoheadlinetitle = REPLACE(@specialreportspromoheadlinetitle,"â€¦","...")
+
+
+
+Set @specialreportstitle = Field(Row(@specialreportstitles,@specialreportscnt),"id_att")
+
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@specialreportslink, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@specialreportslink, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@specialreportslink, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|eveningbrief"
+set @noVideoLink ="?__source=newsletter|eveningbrief"
+IF @m == "/video.cnbc.com/" THEN
+		set @specialreportslink = concat(@specialreportslink,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @specialreportslink = concat(@specialreportslink,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @specialreportslink = concat(@specialreportslink,@noVideoLink)	
+	
+	 ELSE 
+	set @specialreportslink = concat(@specialreportslink)
+set @m ="no match"	
+ENDIF
+
+
+]%%
+
+
+<table class="contents" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:20px;padding-left:15px;" width="95%" align="center">
+	<tr>		
+		<td class="drop" valign="middle">
+				<a href="%%=RedirectTo(@specialreportslink)=%%" title="%%%=v(@specialreportspromoheadlinetitle)=%%" style="color:#2077b6;text-decoration:none;font-weight:normal;font-family:Arial;font-size:20px;">%%=v(@specialreportspromoheadlinetitle)=%%</a>
+		</td>
+	</tr>
+</table>
+<hr style="border: 0px; width: 95%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />
+
+%%[ 
+NEXT @specialreportscnt 
+ENDIF
+]%%
+
+
+<!--END SPECIAL REPORTS -->
+
+<div style="clear:both; height:20px;"></div>
+
+
+<!--FOOTER -->
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;"><tr><td style="background:#ffffff;"><table cellpadding="20" cellspacing="0" border="0" align="center" width="100%" style="border-radius:3px; border-collapse:collapse;background:#efefef; width:80%; margin-bottom:30px;"><tr><td valign="top" style="font-family:Arial, Helvetica, sans-serif; color:#666666; text-transform:uppercase;">Feedback <p style="font-size: 14px;line-height:20px; text-transform:none;"> We value your input&#8212;use <a href="http://cnbcllca.custhelp.com/app/ask?hq_e=el&hq_m=18311&hq_l=35&hq_v=c867b09142" style="color:#2077b6;text-decoration:none;"> our simple form</a> to let us know what you think. Click <a href="http://www.cnbc.com" style="color:#2077b6;text-decoration:none;">here</a> for Real-Time data and top stories on your desktop or mobile device.</p></td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style=" border-collapse:collapse;padding-top:20px;"><tr></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style=" border-collapse:collapse;">
+	<tr>
+	
+	<td class="drop" valign="top" align="center">
+	
+	<table border="0" cellspacing="0" cellpadding="0"><tr><td><a class="send-to-friend" href="%%ftaf_url%%"><img border="0" src="http://image.s7.exacttarget.com/lib/fe9813727567067574/m/1/envelope-sm.png"></a></td><td><a class="send-to-friend" href="%%ftaf_url%%" style="color:#8c8c8c; vertical-align:middle;text-decoration:none;font-size:11px;display:block;padding-left:5px; font-family:Arial; font-weight:bold;">Send this email to a friend</a></td>
+		
+	</tr></table>	</td>
+
+		<td class="drop" align="center">
+			
+			<table cellpadding="0" cellspacing="0" border="0" >
+				<tr>
+					<td valign="top" style="background:#ffffff; padding-right:8px;">
+						<a href="http://www.linkedin.com/company/cnbc" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-linkedin-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="padding-right:8px;background:#ffffff;">
+						<a href="https://plus.google.com/+CNBC/posts" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-google-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="padding-right:8px;background:#ffffff;">
+						<a href="http://www.twitter.com/cnbc" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-twitter-24px.png" border="0"/>
+						</a>
+					</td>
+					<td valign="top" style="background:#ffffff;">
+						<a href="http://www.facebook.com/CNBC" style="text-decoration:none;">
+							<img src="http://fm.cnbc.com/applications/cnbc.com/resources/styles/skin/MARKETING/2013/EMAIL/ICONS/icon-social-facebook-24px.png" border="0"/>
+						</a>
+					</td>
+				</tr>
+			</table>
+			
+			
+		</td>
+</tr></table>
+<br>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a><a class="footer-link" href="http://www.cnbc.com/digital-products/" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue, Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+
+</td></tr></table>
+
+
+
+<br><div style="color:#333333;font-size:14px;font-family:Arial, Helvetica, sans-serif; text-align:center;">To ensure delivery to your inbox,<br> please add <a href="mailto:eveningbrief@response.cnbc.com">eveningbrief@response.cnbc.com</a><br> to your address book.</div>
+<!--END FOOTER -->
+
+	
+	<!--MAIN WRAPPER -->	
+			</td>
+		</tr>
+	</table>
+<!--END MAIN WRAPPER -->
+	
+<table cellpadding="0" cellspacing="0" border="0" width="40" height="6"><tbody><tr><td><img src="http://li.cnbc.com/imp?s=123735900&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735901&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735902&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735903&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735904&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735905&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735906&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735907&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735908&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735909&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735910&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735911&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735912&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735913&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735914&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735915&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735916&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735917&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735918&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td><td><img src="http://li.cnbc.com/imp?s=123735919&sz=2x1&li=eveningbrief&e=%%emailaddr%%&p=%%jobid%%" width="2" height="6" border="0" /></td></tr></tbody></table>
+</body>
+</html>

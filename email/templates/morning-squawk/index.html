@@ -108,25 +108,49 @@
 				</td>
 			</tr>
 		</table>
-		
-	<!--END MAIN HEADER -->		
-			
 
-	
 <!--MARKETS IMAGE -->
-	<table cellspacing="0" cellpadding="10" border="0" align="center" width="95%">
+	<table cellspacing="0" 
+
+cellpadding="10" border="0" 
+
+align="center" width="95%">
 		<tr>
 			<td>
-				<br>
-				<a href="http://www.cnbc.com/pre-markets/">
-					<img src="http://api.cnbc.com/newsletterasp/default.asp?futures=1YMZ5|ESZ5|NQZ5" width="100%"/>
-					<br>
-				</a>
+				
+
+<br>
+				
+
+<a 
+
+href="http://www.cnbc.com/pre-
+
+markets/">
+					
+
+<img 
+
+src="http://api.cnbc.com/newslet
+
+terasp/default.asp?
+
+futures=1YMH6|ESH6|NQH6" 
+
+width="100%"/>
+					
+
+<br>
+				
+
+</a>
 			</td>
 		</tr>
 	</table>
 		
 <!--END MARKETS IMAGE -->
+		
+	<!--END MAIN HEADER -->		
 	%%[Var @xml, @newsxml, @newsid, @newsurl, @newsurlprefix, @newsurlsuffix, @newsbody
 
 	Set @xml = httpget('http://www.cnbc.com/id/102691045/device/rss')
@@ -143,7 +167,7 @@
 
 	Set @newsxml = httpget(@newsurl)
 
-	Set @newsbody = BuildRowsetFromXML(@newsxml,"//html_keypoints",1)
+	Set @newsbody = BuildRowsetFromXML(@newsxml,"//content/html_keypoints",1)
 
 	Set @newsbody = Field(Row(@newsbody,1),"Value")
 

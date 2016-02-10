@@ -1,0 +1,249 @@
+%%[Var @xml, @titles, @title, @descs, @desc, @links, @link, @cnt, @Subject
+
+Set @Subject = "Small cap investor: Buy this helicopter stock"
+Set @desc = "John Rogers Jr., chairman of Ariel Investments, bought shares of a provider of aerial transportation services on Wednesday."
+Set @link = "http://www.cnbc.com/2015/12/09/small-cap-investor-buy-this-helicopter-stock.html"
+Set @button = "Find Out Why"
+
+
+
+
+set @p = "/(video\.cnbc\.com)/"
+set @pd = "/(data\.cnbc\.com)/"
+set @linkObjectp = "www.cnbc.com"
+set @m = RegExMatch(@link, @p, 0 , "IgnoreCase")
+set @mm = RegExMatch(@link, @linkObjectp, 0 , "IgnoreCase")
+set @mmm = RegExMatch(@link, @pd, 0 , "IgnoreCase")
+set @videoLink = "&__source=newsletter|squawkportfolioalert"
+set @noVideoLink ="?__source=newsletter|squawkportfolioalert"
+IF @m == "/video.cnbc.com/" THEN
+		set @link = concat(@link,@videoLink)	
+	
+	 ELSEIF @mm == "www.cnbc.com" THEN
+		set @link = concat(@link,@noVideoLink)
+	
+	ELSEIF @mmm == "/data.cnbc.com/" THEN
+		set @link = concat(@link,@noVideoLink)	
+	
+	 ELSE 
+	set @link = concat(@link)
+set @m ="no match"	
+ENDIF
+]%%
+
+<!DOCTYPE html public"-//W3C//DTD HTML 4.0 Strict//en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>	 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta content="width=device-width" name="viewport"/>
+	<title>CNBC PRO | Alert</title>
+	<style>
+	
+	table[class="wrapper"]{width:600px;}
+	span[class="footer-address"]{color:#909dab!important;text-decoration:none!important;}
+	
+	@media only screen and (max-width: 599px) {
+		table[class="wrapper"]{
+			width:100%!important;
+		}
+	}
+@media only screen and (max-width: 400px) {
+	    td[class="drop"] {
+	        display: block!important;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+			text-align:left!important;
+	    }
+		
+		
+		table[class="contents"]{padding-left:0px!important;}
+		table[class="button"]{width:100%!important;}
+		
+		table[class="button"] a{width:100%;text-align:center!important;display:block!important;margin-left:auto!important;margin-right:auto!important;}
+		
+		a[class="footer-link"]{width:100%!important;
+			display: block!important;
+			margin-bottom:4px;
+			margin-top:4px;
+		}
+		
+		a[class="headline"]{font-size:24px!important;line-height:32px!important;}
+			img[class="header-logo"]{
+				width:250px!important;;
+			}
+			
+			table { 
+			    border-spacing: 0;
+			    border-collapse: collapse;
+			}
+		
+	}
+	
+	</style>
+	
+</head>
+<body style="background:#efefef;">
+	<custom name="opencounter" type="tracking">
+	
+<table border="0" align="center" cellpadding="0" cellspacing="0"><tbody><tr><td><span style="font-family:  Arial, Helvetica, sans-serif; font-size:10px; color:#333333;">To view this email as a web page, click <a id="view-link" href="%%view_email_url%%">here.</a></span></td></tr></tbody></table>
+
+		
+<!--MAIN WRAPPER -->
+	<table class="wrapper" width="600" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;" align="center">
+		<tr>
+			<td>
+<!--END MAIN WRAPPER -->
+			
+		<!--MAIN HEADER -->
+			<table width="100%"  cellspacing="0" cellpadding="10" border="0" align="center">
+				<tr>
+					<td style="border-top-right-radius:3px;border-top-left-radius:3px;background:#146195;font-family:Helvetica, Arial, sans-serif;color:#ffffff;text-transform:uppercase; font-size:18px;" >
+			<img style="color:#ffffff;width:250px;" alt="CNBC PRO | Alert"  class="header-logo" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/pro-alerts-logo.png" border="0" width="250"/>
+					</td>
+				</tr>
+			</table>
+		
+		<!--END MAIN HEADER -->	
+
+<!--ALERT CONTENT -->
+
+	<table cellpadding="30" cellspacing="0" border="0" align="center" width="100%" style="border-radius:3px; border-collapse:collapse;background:#ffffff; ">
+	  <tr>
+	    <td valign="top" style="font-family: Helvetica, Arial, sans-serif; color:#424858;">
+			
+			
+  	      <table cellpadding="0" cellspacing="0" border="0" width="100%" >
+  	        <tr>
+  	          <td>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@link)=%%">%%=v(@Subject)=%%</a>
+	          </td>
+	        </tr>
+	      </table>
+		  
+  	      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+  	        <tr>
+  	          <td>
+				  <br>
+	      <div style="font-family: Helvetica, Arial, sans-serif; color:#424858;font-size:16px;">%%=v(@desc)=%%</div>
+	          </td>
+	        </tr>
+	      </table>
+		  <br>
+  	      
+		<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+			<tr>
+				<td>
+					<table cellpadding="10" cellspacing="0" border="0" align="left" style="border-radius:3px;background:#3bb878;margin-top:20px;text-align:center;">
+						<tr>
+						  <td style="padding:20px;">
+						    <a style="color:#ffffff;text-decoration:none;font-size:18px; font-family: Arial, Helvetica, sans-serif;" href="%%=RedirectTo(@link)=%%">%%=v(@button)=%%
+						    </a>
+						  </td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		  
+		  <br>
+	      <table cellpadding="0" cellspacing="0" border="0" width="100%" >
+	        <tr>
+	          <td height="20">
+	            
+	          </td>
+	        </tr>
+	      </table>
+		 <table cellpadding="0" cellspacing="0" border="0" width="100%">
+		 	        <tr>
+		 	          <td>				  
+		 				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-bottom:25px;" />		  
+		 				  <div style="text-align:center;font-size:18px; font-family: Helvetica, Arial, sans-serif;"><a style="font-family: Helvetica, Arial, sans-serif;color:#2d648a;text-decoration:none;text-align:center;" href="http://www.cnbc.com/squawk-box-portfolio/?__source=newsletter|squawkportfolioalert">Get current standings of the Squawk Box Platinum Portfolio</a></div>
+		 				  <hr style="border: 0px; width: 100%; color: #efefef; height: 1px; background-color: #efefef; margin-top:25px;" />		  
+		 	          </td>
+		 	        </tr>
+		 	      </table>
+
+
+	      
+		  
+          </td>
+        </tr>
+      </table>
+	<br>	
+<!--END ALERT CONTENT -->
+
+%%[ 
+NEXT @cnt 
+ENDIF
+]%%
+
+<div style="clear:both;"></div>
+
+
+<!--FOOTER -->
+
+
+<table cellpadding="20" cellspacing="0" border="0" align="center" width="100%">
+	<tr>
+	
+	
+
+		<td class="drop">
+			
+			<table cellpadding="0" cellspacing="0" border="0" >
+				<tr>
+					<td valign="top" style="padding-right:8px;background:#ffffff;">
+						<a href="http://www.twitter.com/cnbc" style="text-decoration:none;">
+							<img alt="twitter" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/twitter-icon-rd.png" border="0" width="30"/>
+						</a>
+					</td>
+					<td valign="top" style="background:#ffffff; padding-right:8px;">
+						<a href="http://www.facebook.com/CNBC" style="text-decoration:none;">
+							<img alt="facebook" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/facebook-icon-rd.png" border="0" width="30"/>
+						</a>
+					</td>
+					<td valign="top" style="background:#ffffff; padding-right:8px;">
+						<a href="http://www.linkedin.com/company/cnbc" style="text-decoration:none;">
+							<img alt="linkedin" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/linkedin-icon-rd.png" border="0" width="30"/>
+						</a>
+					</td>
+					<td valign="top" style="background:#ffffff;">
+						<a href="https://www.reddit.com/search?q=CNBC" style="text-decoration:none;">
+							<img alt="reddit" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/reddit-icon-rd.png" border="0" width="30"/>
+						</a>
+					</td>
+					
+				</tr>
+			</table>			
+		</td>
+		
+			<td class="drop" valign="bottom" align="right">
+	
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td><a class="send-to-friend" href="%%ftaf_url%%"><img border="0" src="http://image.s7.exacttarget.com/lib/fe9813727567067574/m/1/envelope-sm.png"></a></td><td><a class="send-to-friend" href="%%ftaf_url%%" style="color:#8c8c8c; vertical-align:middle;text-decoration:none;font-size:11px;display:block;padding-left:5px; font-family:Arial; font-weight:bold;">Send this email to a friend</a></td>
+		
+			</tr>
+		</table>
+		</td>
+		
+</tr></table>
+<br>
+<table  cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="border-collapse:collapse;"><tr><td><table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"><tr><td valign="top"></td><td valign="top" style="border-bottom-left-radius:3px;border-bottom-left-radius:3px;border-bottom:#548daa solid 1px; background:#0d3d61; font-family:Helvetica, Arial, sans-serif; color:#909dab;padding-top:10px; padding-left:20px;"><a  href="http://www.cnbc.com?__source=newsletter|squawkportfolioalert"><img style="margin-bottom:10px;" src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-footer-logo.png" width="50" border="0"/></a><br><a class="footer-link" id="unsubscribe" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb9409873107da4c410c76f4906f2b7601e27&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B'),'&sid=',Replace(Replace(EncryptSymmetric(subscriptionid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Unsubscribe</a>&nbsp;  <a class="footer-link" href="http://cnbcmediasales.com/" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">Advertise</a>&nbsp;  <a class="footer-link" href="%%=RedirectTo(Concat('http://pages.response.cnbc.com/page.aspx?QS=2e4c31a3756cb940b06e5657242574ab86ca61148f54f43b&guid=',Replace(Replace(EncryptSymmetric(userguid, 'AES', @null, 'booyahmm', @null, '0000000000000000', @null, '00000000000000000000000000000000'),'=','-'),'+','%20%2B')))=%%" style="color:#3da5ed;text-decoration:none;font-size:11px;margin-right:15px;">More Newsletters</a>&nbsp;<a class="footer-link" href="http://www.cnbc.com/digital-products/" style="color:#3da5ed;text-decoration:none;font-size:11px;">Digital Products</a><br><span style="font-size:11px; display:block; padding-top:10px; padding-bottom:20px;color:#909dab;text-decoration:none;" class="footer-address" valign="bottom"> &copy; 2015 CNBC Inc. All Rights Reserved. <br/> 900 Sylvan Avenue<br>Englewood Cliffs, NJ 07632<br> </span></td></tr></table></td></tr></table>
+
+</td></tr></table>
+
+
+
+<br><div style="color:#333333;font-size:14px;font-family: Helvetica, Arial, sans-serif; text-align:center;">To ensure delivery to your inbox,<br> please add <a href="mailto:cnbcpro@response.cnbc.com">cnbcpro@response.cnbc.com</a><br> to your address book.</div>
+<!--END FOOTER -->
+
+	
+	<!--MAIN WRAPPER -->	
+			</td>
+		</tr>
+	</table>
+<!--END MAIN WRAPPER -->
+</body>
+</html>

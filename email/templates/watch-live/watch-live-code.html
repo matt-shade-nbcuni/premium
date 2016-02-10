@@ -24,7 +24,6 @@ set @mm = RegExMatch(@linkTracking, @linkObjectp, 0 , "IgnoreCase")
 set @mmm = RegExMatch(@linkTracking, @pd, 0 , "IgnoreCase")
 set @videoLink = "&__source=newsletter|watchlive"
 set @noVideoLink ="?__source=newsletter|watchlive"
-
 IF @m == "/video.cnbc.com/" THEN
 		set @linkTracking = concat(@linkTracking,@videoLink)	
 	
@@ -126,8 +125,8 @@ ENDIF
     	      <table cellpadding="0" cellspacing="0" border="0" >
     	        <tr>
     	          <td>
-			<div style="margin-bottom:10px;">We're sorry it's been awhile since we've sent you a Guest Alert email. We've made changes and are back with a new name &mdash; Watch Live alerts. We'll let you know when there is a key guest appearing on CNBC and when to tune in.</div>
-<div>If you'd prefer not to receive Watch Live alerts, you can unsubscribe at the bottom of this email.</div>
+			<div style="line-height:1.2em;">We're sorry it's been awhile since we've sent you a Guest Alert email. We've made changes and are back with a new name &mdash; Watch Live alerts. Just like the Guest Alerts you originally signed up for, Watch Live alerts will let you know when there is an important guest appearing on CNBC and when to tune-in for a "you don't want to miss this" moment.</div><br>
+			<div style="line-height:1.2em;">If you'd prefer not to receive Watch Live alerts, you can unsubscribe at the bottom of this email. We'll miss you though and you'll miss out on the alert that something big is happening on CNBC.</div>
   	          </td>
   	        </tr>
   	      </table>
@@ -137,7 +136,7 @@ ENDIF
   	      <table cellpadding="0" cellspacing="0" border="0" >
   	        <tr>
   	          <td>
-	      <div class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;font-size:32px;line-height:40px;">%%=v(@title)=%%</div>
+	      <a class="headline" style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;font-size:32px;line-height:40px;" href="%%=RedirectTo(@linkTracking)=%%">%%=v(@title)=%%</a>
 	          </td>
 	        </tr>
 	      </table>
@@ -176,20 +175,15 @@ ENDIF
 	      <table class="button" cellpadding="0" cellspacing="0" border="0" width="100%">
 	        <tr>
 	          <td class="drop" align="center">
-				  %%[IF Empty(@linkTracking) THEN]%%
-	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="http://www.cnbc.com/live-tv/?__source=newsletter|watchlivealert">
-					%%[ELSE]%%
-					<a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
-					
-					%%[ENDIF]%%
-	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/wl-watch-live-btn.png" alt="Watch Live TV" width="150" style="width:150px;">
+	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="%%=RedirectTo(@linkTracking)=%%">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/watch-live-btn.png" width="150" style="width:150px;">
 	            </a>
 				<br>
 				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your TV provider</div>
 	          </td>
 	          <td class="drop" align="center">
 	            <a style="font-family: Helvetica, Arial, sans-serif; color:#2d648a;text-decoration:none;" href="https://www.cnbc.com/application/pro/?__source=newsletter|watchlive">
-	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/wl-cnbc-pro-btn.png" alt="Watch CNBC Pro Live" width="150" style="width:150px;">
+	              <img src="http://image.response.cnbc.com/lib/fe9b13727560077e74/m/1/cnbc-pro-btn.png" width="150" style="width:150px;">
 	            </a>
 				<br>
 				<div style="font-family: Helvetica, Arial, sans-serif;color:#424858;font-size:12px;">Log in with your PRO subscription</div>
